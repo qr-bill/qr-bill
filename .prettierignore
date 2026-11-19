@@ -1,2 +1,4 @@
 pnpm-lock.yaml
 docs/api/
+# Third-party code kept unmodified as a test reference
+packages/*/test/**/reference/

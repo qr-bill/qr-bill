@@ -2,6 +2,7 @@
  * Public API of `@qr-bill/core`: the Swiss QR-bill following the SIX Implementation Guidelines v2.4.
  *
  * - The QR-bill as a whole: {@link createQRBill}, {@link validateQRBill}, {@link parseQRBill}.
+ * - The Swiss QR Code, as modules ready to be drawn: {@link encodeSwissQRCode}.
  * - One validator per field, for forms: {@link validateName}, {@link validateAccount}, {@link validateAmount}…
  * - Helpers to build references and convert amounts: {@link createQRReference}, {@link fromCents}…
  *
@@ -32,6 +33,10 @@ export type {
   QRBillResult,
   ReferenceForAccountStatus,
 } from './bill/bill.types.js';
+
+// The Swiss QR Code
+export { encodeSwissQRCode } from './qr-code/encoder.js';
+export type { QRCode } from './qr-code/qr-code.types.js';
 
 // Rules that involve several fields
 export {

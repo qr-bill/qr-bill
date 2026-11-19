@@ -8,5 +8,7 @@
     "declaration": false,
     "types": ["node"]
   },
-  "include": ["packages/*/test/**/*.ts", "*.config.ts", "packages/*/*.config.ts"]
+  "include": ["packages/*/test/**/*.ts", "*.config.ts", "packages/*/*.config.ts"],
+  // Third-party code kept unmodified as a test reference: not ours to type-check.
+  "exclude": ["packages/*/test/**/reference/**"]
 }
