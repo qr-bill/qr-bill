@@ -1,0 +1,23 @@
+name: Feature request
+description: A function, an option or a package that qr-bill does not have yet.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What do you want to do?
+      description: The use case, rather than the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: The API you have in mind, if any.
+      render: ts
+  - type: input
+    id: chapter
+    attributes:
+      label: Chapter of the standard
+      description: When the feature comes from the SIX Implementation Guidelines or the style guide, the chapter or the table.
+      placeholder: IG v2.4, chapter 3.5
