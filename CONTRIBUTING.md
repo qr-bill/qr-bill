@@ -6,7 +6,7 @@ Thank you for helping. qr-bill implements a payment standard: a wrong rule means
 
 - **Open an issue first** for anything beyond a typo, so that we agree on the change before you spend time on it.
 - **Work from the standard**, the [SIX Implementation Guidelines for the QR-bill v2.4](https://www.six-group.com/en/products-services/banking-services/payment-standardization/standards/qr-bill.html) and the style guide, never from another implementation. Do not copy code from other QR-bill libraries.
-- **Security issues** must not be reported in a public issue: use the private vulnerability reporting of GitHub (Security tab, "Report a vulnerability").
+- **Security issues** must not be reported in a public issue: see [SECURITY.md](SECURITY.md).
 
 ## Setup
 

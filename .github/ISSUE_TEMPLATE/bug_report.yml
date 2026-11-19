@@ -1,0 +1,48 @@
+name: Bug report
+description: Something does not follow the standard, or does not work as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for reporting. **Security vulnerabilities must not be reported here**, but [privately](https://github.com/qr-bill/qr-bill/security/advisories/new).
+  - type: input
+    id: version
+    attributes:
+      label: Package and version
+      placeholder: '@qr-bill/core 0.1.0'
+    validations:
+      required: true
+  - type: input
+    id: runtime
+    attributes:
+      label: Runtime
+      placeholder: Node 22.12, Chrome 131, Deno 2.1…
+    validations:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: Minimal code
+      description: The smallest code that shows the problem. Use fictional data only, never a real name, address or account.
+      render: ts
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: The error, the issue codes, the payload…
+    validations:
+      required: true
+  - type: input
+    id: chapter
+    attributes:
+      label: Chapter of the standard
+      description: When the expected result comes from the SIX Implementation Guidelines or the style guide, the chapter or the table.
+      placeholder: IG v2.4, chapter 4.3.2
