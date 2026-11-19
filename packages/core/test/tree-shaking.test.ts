@@ -43,6 +43,10 @@ describe('tree shaking', () => {
     expect(await bundle(['validateQRBill'])).not.toContain('limited to 997 bytes');
   });
 
+  it('leaves the layout out of an application that only validates bills', async () => {
+    expect(await bundle(['validateQRBill'])).not.toContain('.5523'); // a constant of the scissors symbol
+  });
+
   it('leaves the validation out of an application that only encodes QR codes', async () => {
     const code = await bundle(['encodeSwissQRCode']);
     expect(code).toContain('limited to 997 bytes');
