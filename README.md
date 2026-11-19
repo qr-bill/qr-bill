@@ -4,7 +4,7 @@ Swiss QR-bill (QR-Rechnung, QR-facture, QR-fattura, Quint QR) for JavaScript and
 
 <!-- release-blocker: remove this banner and this comment before the first npm release -->
 
-> **Status: work in progress, not published yet.** The core (validation, Swiss QR Code content, references) is done and fully tested. QR code rendering, SVG and PDF output come next.
+> **Status: work in progress, not published yet.** The core (validation, Swiss QR Code content and encoding, references) is done and fully tested. Layout, SVG and PDF output come next.
 
 - **Runs everywhere.** No Node or DOM API in the core: browsers, Node, Deno, Bun, Cloudflare Workers, React Native.
 - **Zero dependencies** in the core. PDF engines live in separate adapters. An application only carries what it imports: `isValidIBAN` alone is 340 bytes once bundled.
@@ -17,7 +17,7 @@ Swiss QR-bill (QR-Rechnung, QR-facture, QR-fattura, Quint QR) for JavaScript and
 ## Example
 
 ```ts
-import { createQRBill, createQRReference, fromCents } from '@qr-bill/core';
+import { createQRBill, createQRReference, encodeSwissQRCode, fromCents } from '@qr-bill/core';
 
 const bill = createQRBill({
   currency: 'CHF',
@@ -36,6 +36,9 @@ const bill = createQRBill({
 });
 
 bill.payload; // content of the Swiss QR Code
+
+const qrCode = encodeSwissQRCode(bill.payload); // level M, smallest version
+qrCode.modules; // rows of booleans, true = dark module, ready to be drawn
 ```
 
 Invalid input throws a `QRBillValidationError` whose `issues` list every problem:
@@ -93,6 +96,10 @@ See [docs/architecture.md](docs/architecture.md) for the design.
 ## Contributing
 
 Issues and pull requests are welcome. The workflow, the code conventions and how to add a rule of the standard are described in [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Acknowledgements
+
+The QR code encoder is adapted from the [QR Code generator library](https://www.nayuki.io/page/qr-code-generator-library) of Project Nayuki (MIT); its notice is in [LICENSE](packages/core/LICENSE).
 
 ## License
 

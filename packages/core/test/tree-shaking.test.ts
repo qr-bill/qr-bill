@@ -38,4 +38,15 @@ describe('tree shaking', () => {
   it('carries the country list only with the country validator', async () => {
     expect(await bundle(['validateCountry'])).toContain('ZW');
   });
+
+  it('leaves the QR code encoder out of an application that only validates bills', async () => {
+    expect(await bundle(['validateQRBill'])).not.toContain('limited to 997 bytes');
+  });
+
+  it('leaves the validation out of an application that only encodes QR codes', async () => {
+    const code = await bundle(['encodeSwissQRCode']);
+    expect(code).toContain('limited to 997 bytes');
+    expect(code).not.toContain('ZW'); // country list
+    expect(code).not.toContain('invalid_iban');
+  });
 });

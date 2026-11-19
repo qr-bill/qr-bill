@@ -10,7 +10,7 @@ const SOURCE = new URL('../src/', import.meta.url);
 const READMES = [new URL('../README.md', import.meta.url), new URL('../../../README.md', import.meta.url)];
 
 const EXAMPLE_LINE = /^\s*(?:\* )?([A-Za-z]\w*\(.*\));\s*\/\/ (.+)$/;
-const LEADING_LITERAL = /^('(?:[^'\\]|\\.)*'|\[.*?\]|-?\d+(?:\.\d+)?|true|false|undefined)/;
+const LEADING_LITERAL = /^('(?:[^'\\]|\\.)*'|\[.*?\]|0[xXbB][0-9a-fA-F]+|-?\d+(?:\.\d+)?|true|false|undefined)/;
 
 interface Example {
   readonly file: URL;

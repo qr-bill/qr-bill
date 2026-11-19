@@ -17,6 +17,7 @@ describe('public API', () => {
       'createCreditorReference',
       'createQRBill',
       'createQRReference',
+      'encodeSwissQRCode',
       'findInvalidCharacters',
       'formatAmount',
       'formatIBAN',

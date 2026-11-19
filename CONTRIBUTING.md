@@ -86,6 +86,7 @@ The maintainers publish from the changesets accumulated on `main`: `changeset ve
 - **One validator per field.** A validator is a pure function that never throws, accepts `string | null | undefined`, normalizes first (Unicode NFC, trimmed), treats blank as missing, and returns the first problem in a fixed order. `validateQRBill` is built on the field validators: never re-implement a rule inside it.
 - **Issue codes are a public contract.** Clients translate them and map them to form fields. Adding one is a new feature; renaming or removing one is a breaking change.
 - **Amounts are decimal strings**, never floating-point numbers.
+- **Third-party code**: the files of `src/qr-code/` are adapted from Project Nayuki and keep its MIT notice at the top. `test/qr-code/reference/qrcodegen.ts` is the unmodified original, used as a witness by the tests: never edit it (a test checks its hash).
 - **No computation at module level** (`new Set(…)`, `.map(…)`): build data on first use, so that bundlers can drop what an application does not import. `test/tree-shaking.test.ts` checks it.
 - **Every rule of the standard has a test**, and the code and the test cite the chapter: `// chapter 4.3.2`.
 - **100 % coverage.** When a branch cannot be reached, restructure the code rather than adding a fallback.
