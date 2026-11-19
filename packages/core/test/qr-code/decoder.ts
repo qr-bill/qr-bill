@@ -38,7 +38,11 @@ export async function decode(qrCode: QRCode): Promise<Decoded[]> {
       }
     }
   }
-  const image: ImageData = { data, width: side, height: side };
+  return decodeImage({ data, width: side, height: side });
+}
+
+/** Decodes the QR codes found in an image, given as RGBA pixels; an empty list when nothing can be read. */
+export async function decodeImage(image: ImageData): Promise<Decoded[]> {
   const results = await readBarcodes(image, { formats: ['QRCode'], tryHarder: false, maxNumberOfSymbols: 1 });
   return results.map(({ text, extra }) => {
     // extra is JSON, e.g. {"DataMask":2,"UEC":1.00,"Version":"1","ECLevel":"M"}

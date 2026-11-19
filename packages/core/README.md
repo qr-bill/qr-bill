@@ -16,7 +16,7 @@ Swiss QR-bill (QR-Rechnung, QR-facture, QR-fattura, Quint QR) for JavaScript and
 
 <!-- release-blocker: remove this banner and this comment before the first npm release -->
 
-> **Status: work in progress, not published yet.** The core (validation, Swiss QR Code content and encoding, references) is done and fully tested. Layout, SVG and PDF output come next.
+> **Status: work in progress, not published yet.** The core (validation, Swiss QR Code, references, layout of the payment slip, SVG) is done and fully tested. PDF output comes next.
 
 - **Runs everywhere.** No Node or DOM API in the core: browsers, Node, Deno, Bun, Cloudflare Workers, React Native.
 - **Zero dependencies** in the core. PDF engines live in separate adapters. An application only carries what it imports: `isValidIBAN` alone is 340 bytes once bundled.
@@ -29,7 +29,7 @@ Swiss QR-bill (QR-Rechnung, QR-facture, QR-fattura, Quint QR) for JavaScript and
 ## Example
 
 ```ts
-import { createQRBill, createQRReference, encodeSwissQRCode, fromCents } from '@qr-bill/core';
+import { createQRBill, createQRReference, fromCents, layoutQRBill, renderSVG } from '@qr-bill/core';
 
 const bill = createQRBill({
   currency: 'CHF',
@@ -49,8 +49,8 @@ const bill = createQRBill({
 
 bill.payload; // content of the Swiss QR Code
 
-const qrCode = encodeSwissQRCode(bill.payload); // level M, smallest version
-qrCode.modules; // rows of booleans, true = dark module, ready to be drawn
+const layout = layoutQRBill(bill, { language: 'fr' }); // receipt and payment part, positioned in millimetres
+const svg = renderSVG(layout); // SVG document of 210 × 105 mm, Swiss QR Code and cutting lines included
 ```
 
 Invalid input throws a `QRBillValidationError` whose `issues` list every problem:

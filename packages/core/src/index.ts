@@ -38,6 +38,23 @@ export type {
 export { encodeSwissQRCode } from './qr-code/encoder.js';
 export type { QRCode } from './qr-code/qr-code.types.js';
 
+// The payment slip: layout in millimetres and SVG rendering
+export { layoutQRBill } from './layout/layout.js';
+export { renderSVG } from './svg/svg.js';
+export type {
+  Box,
+  FilledPath,
+  FontWeight,
+  LayoutElement,
+  LayoutOptions,
+  PathElement,
+  QRBillLayout,
+  Separators,
+  Stroke,
+  StrokedPath,
+  TextElement,
+} from './layout/layout.types.js';
+
 // Rules that involve several fields
 export {
   isAdditionalInformationWithinLimit,
