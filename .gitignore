@@ -1,0 +1,14 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.DS_Store
+.env
+.env.*
+test-output/
+
+# Local instructions for AI assistants, not part of the project
+CLAUDE.md
+
+# Generated API documentation (pnpm docs)
+docs/api/

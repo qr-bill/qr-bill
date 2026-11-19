@@ -1,0 +1,11 @@
+{
+  // No Node, no DOM: "types": [] and an ES-only "lib" make any use of
+  // Buffer, document, TextEncoder, etc. a compile error. That is what keeps
+  // the core runnable in browsers, Node, Deno, Bun, Workers and React Native.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": [],
+    "noEmit": true
+  },
+  "include": ["src"]
+}

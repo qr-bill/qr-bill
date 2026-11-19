@@ -1,0 +1,6 @@
+packages:
+  - packages/*
+
+# Supply-chain hygiene: never install a version published less than 7 days ago.
+# Most malicious releases are detected and unpublished within that window.
+minimumReleaseAge: 10080

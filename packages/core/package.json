@@ -1,0 +1,47 @@
+{
+  "name": "@qr-bill/core",
+  "version": "0.0.0",
+  "description": "Swiss QR-bill (QR-Rechnung, QR-facture) for JavaScript: validation, Swiss QR Code payload and references, following the SIX Implementation Guidelines v2.4. Zero dependencies, runs everywhere.",
+  "keywords": [
+    "qr-bill",
+    "qr-rechnung",
+    "qr-facture",
+    "qr-fattura",
+    "swiss-qr-code",
+    "swiss",
+    "invoice",
+    "iban",
+    "qr-iban",
+    "scor",
+    "iso-11649",
+    "six"
+  ],
+  "license": "MIT",
+  "author": "Olivier Azevedo <hello@claine.ai> (https://claine.ai)",
+  "homepage": "https://github.com/qr-bill/qr-bill#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qr-bill/qr-bill.git",
+    "directory": "packages/core"
+  },
+  "bugs": "https://github.com/qr-bill/qr-bill/issues",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit",
+    "check:package": "publint && attw --pack --profile esm-only",
+    "prepublishOnly": "node ../../scripts/check-release-blockers.js"
+  }
+}

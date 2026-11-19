@@ -1,0 +1,18 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "qr-bill",
+  "entryPoints": ["packages/core/src"],
+  "entryPointStrategy": "expand",
+  "tsconfig": "packages/core/tsconfig.json",
+  "out": "docs/api",
+  "plugin": ["./scripts/typedoc-link-by-name.js"],
+  "readme": "none",
+  "sort": ["source-order"],
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "rewrittenLink": true,
+    "notDocumented": true
+  },
+  "treatWarningsAsErrors": true
+}

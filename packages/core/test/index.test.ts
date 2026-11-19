@@ -1,0 +1,56 @@
+// The public API is a contract: adding or removing an export must be a deliberate change, visible in this list.
+import { describe, expect, it } from 'vitest';
+import * as api from '../src/index.js';
+
+describe('public API', () => {
+  it('exports exactly these values', () => {
+    expect(Object.keys(api).sort()).toEqual([
+      'ADDITIONAL_INFORMATION_MAX_LENGTH',
+      'ADDRESS_MAX_LENGTH',
+      'ALTERNATIVE_PROCEDURE_MAX_LENGTH',
+      'DO_NOT_USE_FOR_PAYMENT',
+      'LABELS',
+      'MAX_ALTERNATIVE_PROCEDURES',
+      'MAX_AMOUNT',
+      'MAX_PAYLOAD_BYTES',
+      'QRBillValidationError',
+      'createCreditorReference',
+      'createQRBill',
+      'createQRReference',
+      'findInvalidCharacters',
+      'formatAmount',
+      'formatIBAN',
+      'formatReference',
+      'fromCents',
+      'isAdditionalInformationWithinLimit',
+      'isCurrencyAllowedForAccount',
+      'isQRIBAN',
+      'isValidCreditorReference',
+      'isValidCurrency',
+      'isValidIBAN',
+      'isValidQRReference',
+      'isZeroAmountAllowed',
+      'listCountryCodes',
+      'normalizeAmount',
+      'normalizeIBAN',
+      'parseQRBill',
+      'qrBillSchema',
+      'safeParseQRBill',
+      'sanitizeText',
+      'validateAccount',
+      'validateAlternativeProcedure',
+      'validateAmount',
+      'validateBillingInformation',
+      'validateBuildingNumber',
+      'validateCountry',
+      'validateMessage',
+      'validateName',
+      'validatePostalCode',
+      'validateQRBill',
+      'validateReference',
+      'validateReferenceForAccount',
+      'validateStreet',
+      'validateTown',
+    ]);
+  });
+});

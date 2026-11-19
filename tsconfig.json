@@ -1,0 +1,12 @@
+{
+  // Type-checks tests and tooling files. Library sources are checked by each
+  // package's own tsconfig, which has no Node or DOM types on purpose.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "isolatedDeclarations": false,
+    "declaration": false,
+    "types": ["node"]
+  },
+  "include": ["packages/*/test/**/*.ts", "*.config.ts", "packages/*/*.config.ts"]
+}
