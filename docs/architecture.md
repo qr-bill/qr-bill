@@ -12,13 +12,21 @@ Non-goals: generating whole invoices (the caller owns the invoice layout; we add
 
 ## Pipeline
 
-```
-field values ──► field validators ──┐
-                                    ▼
-input ──► validateQRBill ──► QRBill ──► Swiss QR Code payload ──► encodeSwissQRCode ──► QR modules
-                                │                                                          │
-                                └──► layoutQRBill: layout (mm) ◄───────────────────────────┘
-                                          └──► renderers: renderSVG; next PDFKit, jsPDF, React…
+```mermaid
+flowchart LR
+  fields["Field values (a form)"] --> validators["Field validators<br/>validateName, validateAccount…"]
+  input["Input (unknown)"] --> validate["validateQRBill"]
+  validators -. same rules .-> validate
+  validate --> bill["QRBill"]
+  bill --> payload["Swiss QR Code content<br/>(payload)"]
+  payload --> encode["encodeSwissQRCode"]
+  encode --> modules["QR code modules"]
+  bill --> layout["layoutQRBill<br/>layout in mm"]
+  modules --> layout
+  layout --> svg["renderSVG"]
+  layout -. next .-> pdf["PDFKit, jsPDF, React…"]
+  scanned["Scanned QR code"] --> parse["parseQRBill"]
+  parse --> validate
 ```
 
 - **Field validators** (`validateName`, `validateAccount`, `validateAmount`…) check one field as typed in a form and return a boolean or a status (`'valid'`, `'required'`, `'too_long'`…). Rules that involve several fields have their own validators (`validateReferenceForAccount`, `isZeroAmountAllowed`…).
