@@ -1,4 +1,16 @@
-# qr-bill
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo-white.svg" />
+    <img src="docs/assets/logo-black.svg" alt="qr-bill" height="72" />
+  </picture>
+</h1>
+
+<p align="center">
+  <a href="https://github.com/qr-bill/qr-bill/actions/workflows/ci.yml"><img src="https://github.com/qr-bill/qr-bill/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="vitest.config.ts"><img src="https://img.shields.io/badge/coverage-100%25-brightgreen" alt="Coverage: 100 %" /></a>
+  <a href="packages/core/package.json"><img src="https://img.shields.io/badge/dependencies-0-brightgreen" alt="Dependencies: 0" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/qr-bill/qr-bill" alt="License: MIT" /></a>
+</p>
 
 Swiss QR-bill (QR-Rechnung, QR-facture, QR-fattura, Quint QR) for JavaScript and TypeScript, following the [SIX Implementation Guidelines v2.4](https://www.six-group.com/en/products-services/banking-services/payment-standardization/standards/qr-bill.html), in force since 14 November 2026.
 
@@ -100,6 +112,10 @@ Issues and pull requests are welcome. The workflow, the code conventions and how
 ## Acknowledgements
 
 The QR code encoder is adapted from the [QR Code generator library](https://www.nayuki.io/page/qr-code-generator-library) of Project Nayuki (MIT); its notice is in [LICENSE](packages/core/LICENSE).
+
+## Trademarks
+
+qr-bill is an independent open-source project. It is not affiliated with or endorsed by SIX Group, whose subsidiary SIX Interbank Clearing Ltd publishes the Swiss Implementation Guidelines for the QR-bill. "QR Code" is a registered trademark of DENSO WAVE INCORPORATED.
 
 ## License
 
