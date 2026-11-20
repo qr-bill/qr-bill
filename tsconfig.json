@@ -6,7 +6,11 @@
     "noEmit": true,
     "isolatedDeclarations": false,
     "declaration": false,
-    "types": ["node"]
+    "types": ["node"],
+    // The tests of the adapters run against the sources of the core, so that no build is needed first.
+    "paths": {
+      "@qr-bill/core": ["./packages/core/src/index.ts"]
+    }
   },
   "include": ["packages/*/test/**/*.ts", "*.config.ts", "packages/*/*.config.ts"],
   // Third-party code kept unmodified as a test reference: not ours to type-check.

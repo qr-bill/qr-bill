@@ -16,7 +16,7 @@ Swiss QR-bill (QR-Rechnung, QR-facture, QR-fattura, Quint QR) for JavaScript and
 
 <!-- release-blocker: remove this banner and this comment before the first npm release -->
 
-> **Status: work in progress, not published yet.** The core (validation, Swiss QR Code, references, layout of the payment slip, SVG) is done and fully tested. PDF output comes next.
+> **Status: work in progress, not published yet.** The core (validation, Swiss QR Code, references, layout of the payment slip, SVG) and the PDFKit adapter are done and fully tested.
 
 - **Runs everywhere.** No Node or DOM API in the core: browsers, Node, Deno, Bun, Cloudflare Workers, React Native.
 - **Zero dependencies** in the core. PDF engines live in separate adapters. An application only carries what it imports: `isValidIBAN` alone is 340 bytes once bundled.
@@ -64,6 +64,16 @@ if (!result.success) {
 }
 ```
 
+## PDF
+
+[`@qr-bill/pdfkit`](https://github.com/qr-bill/qr-bill/tree/main/packages/pdfkit) adds the payment slip to a [PDFKit](https://pdfkit.org) document, with its fonts:
+
+```ts
+import { attachTo } from '@qr-bill/pdfkit';
+
+attachTo(doc, bill, { language: 'fr' }); // at the bottom of the last page, or on a new page if the invoice leaves no room
+```
+
 ## Validate a form, field by field
 
 Each field of the QR-bill has its validator. It takes the value as typed and returns `true`/`false` when there are two outcomes, or a status naming the problem, ready to be translated:
@@ -90,11 +100,11 @@ The maximum lengths are exported too (`ADDRESS_MAX_LENGTH.name` is 70), for the 
 
 ## Packages
 
-| Package           | Status      | Purpose                                    |
-| ----------------- | ----------- | ------------------------------------------ |
-| `@qr-bill/core`   | in progress | Validation, payload, references, parsing   |
-| `@qr-bill/pdfkit` | planned     | Payment part in a PDFKit document (server) |
-| `@qr-bill/jspdf`  | planned     | Payment part in a jsPDF document (browser) |
+| Package                                                                           | Status      | Purpose                                               |
+| --------------------------------------------------------------------------------- | ----------- | ----------------------------------------------------- |
+| `@qr-bill/core`                                                                   | in progress | Validation, payload, references, parsing, layout, SVG |
+| [`@qr-bill/pdfkit`](https://github.com/qr-bill/qr-bill/tree/main/packages/pdfkit) | in progress | Payment slip in a PDFKit document (Node)              |
+| `@qr-bill/jspdf`                                                                  | planned     | Payment slip in a jsPDF document (browser)            |
 
 ## Quality
 

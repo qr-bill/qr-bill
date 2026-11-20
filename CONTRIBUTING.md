@@ -69,6 +69,8 @@ The maintainers publish from the changesets accumulated on `main`: `changeset ve
 
 `index.ts` only re-exports the public API. Tests mirror the folders of `src` in `test`. File names are in kebab-case; imports end in `.js`.
 
+An adapter (`packages/pdfkit`) draws the layout of the core with a rendering library: it holds no rule of the standard, and its tests check that what it draws matches the layout.
+
 ### Naming
 
 | Prefix       | Returns                                                        | Example                                         |
@@ -88,6 +90,7 @@ The maintainers publish from the changesets accumulated on `main`: `changeset ve
 - **Amounts are decimal strings**, never floating-point numbers.
 - **Generated code**: `src/layout/font-metrics.ts` is written by `scripts/generate-font-metrics.py` from the Liberation Sans font files (instructions in the script); never edit it by hand.
 - **Third-party code**: the files of `src/qr-code/` are adapted from Project Nayuki and keep its MIT notice at the top. `test/qr-code/reference/qrcodegen.ts` is the unmodified original, used as a witness by the tests: never edit it (a test checks its hash).
+- **Fonts**: `packages/pdfkit/fonts/` holds Liberation Sans 2.1.5, unmodified, under the SIL Open Font License 1.1, which reserves the name "Liberation": never edit nor subset these files.
 - **No computation at module level** (`new Set(…)`, `.map(…)`): build data on first use, so that bundlers can drop what an application does not import. `test/tree-shaking.test.ts` checks it.
 - **Every rule of the standard has a test**, and the code and the test cite the chapter: `// chapter 4.3.2`.
 - **100 % coverage.** When a branch cannot be reached, restructure the code rather than adding a fallback.
