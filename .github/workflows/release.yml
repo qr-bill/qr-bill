@@ -1,5 +1,6 @@
-# Publishes to npm the packages whose version on `main` is not there yet, with their tags and GitHub releases.
-# Most pushes to `main` publish nothing: only a release pull request changes the versions. See docs/releasing.md.
+# Stages on npm the packages whose version on `main` is not there yet, waits for a maintainer to approve them on
+# npmjs.com, and publishes their GitHub releases. Most pushes to `main` find nothing to do: only a release pull request
+# changes the versions. See docs/releasing.md.
 name: Release
 
 on:
@@ -8,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       dry-run:
-        description: Pack and check without publishing (untick only to retry a failed publication)
+        description: Pack and check without staging (untick to retry a failed run, or to release an approved version)
         type: boolean
         default: true
 
@@ -21,7 +22,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Compares the versions of main with npm, read-only. On most pushes it finds nothing and the workflow ends here.
+  # Compares the versions of main with npm and the GitHub releases, read-only. On most pushes it finds nothing to do and
+  # the workflow ends here.
   plan:
     name: Plan
     if: github.ref == 'refs/heads/main'
@@ -40,16 +42,18 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-  # Runs only when there is something to publish; the only job allowed to write tags and to publish to npm.
+  # Runs only when there is something to do; the only job allowed to stage on npm and to write releases and tags.
   publish:
     name: Publish
     needs: plan
     if: needs.plan.outputs.count != '0'
     runs-on: ubuntu-latest
-    # Only `main` may use this environment, and npm accepts publications from this workflow in this environment only.
+    # Staging, then waiting up to 30 minutes for the approval on npmjs.com.
+    timeout-minutes: 60
+    # Only `main` may use this environment, and npm accepts staging from this workflow in this environment only.
     environment: npm
     permissions:
-      contents: write # tags and GitHub releases
+      contents: write # draft releases, releases and their tags
       id-token: write # Trusted Publishing on npm, which also signs the provenance
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -58,12 +62,20 @@ jobs:
       - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          # Node 24 comes with npm 11, which Trusted Publishing requires (11.5.1 or later).
+          # Node 24 comes with npm 11.19: Trusted Publishing needs 11.5.1 or later, `npm stage` 11.15.0 or later.
           node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
-      - run: pnpm install --frozen-lockfile
+      # With write access the drafts are visible: the exact state, and whether anything is to stage.
+      - name: State
+        id: state
+        run: node scripts/release.js plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - if: steps.state.outputs.stage != '0'
+        run: pnpm install --frozen-lockfile
       - name: Checks
+        if: steps.state.outputs.stage != '0'
         run: |
           pnpm format:check
           pnpm lint
@@ -73,7 +85,7 @@ jobs:
           pnpm build
           pnpm check:package
           node scripts/check-release-blockers.js
-      - name: Publish
-        run: pnpm release:publish ${{ inputs.dry-run && '--dry-run' || '' }}
+      - name: Stage and release
+        run: node scripts/release.js publish --wait 30 ${{ inputs.dry-run && '--dry-run' || '' }}
         env:
           GH_TOKEN: ${{ github.token }}

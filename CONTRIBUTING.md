@@ -53,7 +53,7 @@ Each package has its own version, in its `package.json`, following [semantic ver
 
 ### Releases
 
-Merging your pull request publishes nothing: its changeset waits on `main`. When the maintainers decide to publish, a release pull request turns the pending changesets into versions and changelogs, and its merge publishes the new versions from GitHub Actions, with npm Trusted Publishing and provenance. The whole process, its protections and what to do when it fails are described in [docs/releasing.md](docs/releasing.md).
+Merging your pull request publishes nothing: its changeset waits on `main`. When the maintainers decide to publish, a release pull request turns the pending changesets into versions and changelogs, and its merge stages the new versions on npm from GitHub Actions, with npm Trusted Publishing; they become public, with provenance, once a maintainer approves them on npm with two-factor authentication. The whole process, its protections and what to do when it fails are described in [docs/releasing.md](docs/releasing.md).
 
 ## Code conventions
 
