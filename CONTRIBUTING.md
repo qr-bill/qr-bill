@@ -38,7 +38,7 @@ The CI runs `format:check`, `lint`, `typecheck`, `coverage`, `check:docs`, `buil
 1. **Issue.** Every change starts from an issue.
 2. **Branch** from `main`, named after the kind of change: `feat/<slug>`, `fix/<slug>`, `docs/<slug>`, `test/<slug>`, `refactor/<slug>` or `chore/<slug>`. Nothing is committed directly to `main`.
 3. **Commits** in English, short, in the [Conventional Commits](https://www.conventionalcommits.org) form, referencing the issue: `fix: reject a country code that changes length when upper-cased (#12)`.
-4. **Changeset.** If the change affects a published package (behaviour, API, types, documentation shipped in the package), run `pnpm changeset`, choose the packages and the kind of version, and describe the change for the users in one or two sentences. The file it creates in `.changeset/` is committed with your change. Changes to tests, tooling or repository documentation only need none.
+4. **Changeset.** If the change affects a published package (behaviour, API, types, documentation shipped in the package), run `pnpm changeset`, choose the packages and the kind of version, and describe the change for the users in one or two sentences. The file it creates in `.changeset/` is committed with your change. Changes to tests, tooling or repository documentation only need none. Never change a `version` or a `CHANGELOG.md` yourself: the release does it.
 5. **Pull request** into `main`, linked to the issue, with the CI green. It is merged with "Squash and merge": one commit per pull request on `main`, titled like a commit message.
 
 ### Versions
@@ -53,7 +53,7 @@ Each package has its own version, in its `package.json`, following [semantic ver
 
 ### Releases
 
-The maintainers publish from the changesets accumulated on `main`: `changeset version` raises the versions and writes the changelogs, `changeset publish` publishes to npm with provenance. Publication is refused while a README still carries a `<!-- release-blocker -->` comment (`scripts/check-release-blockers.js`).
+Merging your pull request publishes nothing: its changeset waits on `main`. When the maintainers decide to publish, a release pull request turns the pending changesets into versions and changelogs, and its merge publishes the new versions from GitHub Actions, with npm Trusted Publishing and provenance. The whole process, its protections and what to do when it fails are described in [docs/releasing.md](docs/releasing.md).
 
 ## Code conventions
 

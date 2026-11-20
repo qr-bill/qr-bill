@@ -7,6 +7,8 @@
 
 <p align="center">
   <a href="https://github.com/qr-bill/qr-bill/actions/workflows/ci.yml"><img src="https://github.com/qr-bill/qr-bill/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://www.npmjs.com/package/@qr-bill/core"><img src="https://img.shields.io/npm/v/@qr-bill/core" alt="npm version of @qr-bill/core" /></a>
+  <a href="https://bundlejs.com/?q=@qr-bill/core"><img src="https://img.shields.io/bundlejs/size/@qr-bill/core" alt="Size of @qr-bill/core, minified and gzipped" /></a>
   <a href="https://github.com/qr-bill/qr-bill/blob/main/vitest.config.ts"><img src="https://img.shields.io/badge/coverage-100%25-brightgreen" alt="Coverage: 100 %" /></a>
   <a href="https://github.com/qr-bill/qr-bill/blob/main/packages/core/package.json"><img src="https://img.shields.io/badge/dependencies-0-brightgreen" alt="Dependencies: 0" /></a>
   <a href="https://github.com/qr-bill/qr-bill/blob/main/LICENSE"><img src="https://img.shields.io/github/license/qr-bill/qr-bill" alt="License: MIT" /></a>

@@ -1,0 +1,79 @@
+# Publishes to npm the packages whose version on `main` is not there yet, with their tags and GitHub releases.
+# Most pushes to `main` publish nothing: only a release pull request changes the versions. See docs/releasing.md.
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Pack and check without publishing (untick only to retry a failed publication)
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+# One release at a time, never cancelled halfway through a publication.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  # Compares the versions of main with npm, read-only. On most pushes it finds nothing and the workflow ends here.
+  plan:
+    name: Plan
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      count: ${{ steps.plan.outputs.count }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - id: plan
+        run: node scripts/release.js plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  # Runs only when there is something to publish; the only job allowed to write tags and to publish to npm.
+  publish:
+    name: Publish
+    needs: plan
+    if: needs.plan.outputs.count != '0'
+    runs-on: ubuntu-latest
+    # Only `main` may use this environment, and npm accepts publications from this workflow in this environment only.
+    environment: npm
+    permissions:
+      contents: write # tags and GitHub releases
+      id-token: write # Trusted Publishing on npm, which also signs the provenance
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          # Node 24 comes with npm 11, which Trusted Publishing requires (11.5.1 or later).
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      - name: Checks
+        run: |
+          pnpm format:check
+          pnpm lint
+          pnpm typecheck
+          pnpm coverage
+          pnpm check:docs
+          pnpm build
+          pnpm check:package
+          node scripts/check-release-blockers.js
+      - name: Publish
+        run: pnpm release:publish ${{ inputs.dry-run && '--dry-run' || '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
