@@ -1,0 +1,51 @@
+{
+  "name": "@qr-bill/pdfkit",
+  "version": "0.0.0",
+  "description": "Swiss QR-bill (QR-Rechnung, QR-facture) for PDFKit: adds the receipt and the payment part at the bottom of the last page, following the SIX Implementation Guidelines v2.4 and the style guide.",
+  "keywords": [
+    "qr-bill",
+    "qr-rechnung",
+    "qr-facture",
+    "qr-fattura",
+    "swiss-qr-code",
+    "swiss",
+    "invoice",
+    "pdf",
+    "pdfkit"
+  ],
+  "license": "MIT",
+  "author": "Olivier Azevedo <hello@claine.ai> (https://claine.ai)",
+  "homepage": "https://github.com/qr-bill/qr-bill/tree/main/packages/pdfkit#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qr-bill/qr-bill.git",
+    "directory": "packages/pdfkit"
+  },
+  "bugs": "https://github.com/qr-bill/qr-bill/issues",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "fonts"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit",
+    "check:package": "publint && attw --pack --profile esm-only",
+    "prepublishOnly": "node ../../scripts/check-release-blockers.js"
+  },
+  "dependencies": {
+    "@qr-bill/core": "workspace:^"
+  },
+  "peerDependencies": {
+    "pdfkit": ">=0.17.0"
+  }
+}

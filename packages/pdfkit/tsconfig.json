@@ -1,0 +1,13 @@
+{
+  // Type-checks the adapter against the sources of the core, so that no build is needed first. The adapter runs on
+  // Node: it reads its fonts from the package.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "noEmit": true,
+    "paths": {
+      "@qr-bill/core": ["../core/src/index.ts"]
+    }
+  },
+  "include": ["src"]
+}

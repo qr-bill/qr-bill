@@ -24,7 +24,8 @@ flowchart LR
   bill --> layout["layoutQRBill<br/>layout in mm"]
   modules --> layout
   layout --> svg["renderSVG"]
-  layout -. next .-> pdf["PDFKit, jsPDF, React…"]
+  layout --> pdfkit["attachTo<br/>@qr-bill/pdfkit"]
+  layout -. next .-> others["jsPDF, React…"]
   scanned["Scanned QR code"] --> parse["parseQRBill"]
   parse --> validate
 ```
@@ -34,7 +35,8 @@ flowchart LR
 - **QRBill** is immutable and normalized (IBAN without spaces, NFC text, country in upper case, amount with two decimals).
 - **Payload** follows table 8 of the standard: 31 mandatory lines, optional trailing elements left out when unused, no line break after the last element. `parseQRBill` reverses it through the same validation.
 - **QR code** (`encodeSwissQRCode`) encodes the payload as chapter 6 requires: byte mode in UTF-8, error correction level M, the smallest version that holds it (at most 25), the mask with the lowest penalty. It returns the modules as plain data; the quiet zone, the size of 46 × 46 mm and the Swiss cross belong to the layout.
-- **Layout** (`layoutQRBill`) places every element of the receipt and the payment part in millimetres, as data: lines of text at their baseline, and paths (the QR code as one path, the Swiss cross, corner marks, cutting lines, scissors). Renderers only draw texts and paths, so the conformity of the layout to the style guide is tested once, on the layout, not once per renderer. `renderSVG` is the reference renderer; PDF adapters come next.
+- **Layout** (`layoutQRBill`) places every element of the receipt and the payment part in millimetres, as data: lines of text at their baseline, and paths (the QR code as one path, the Swiss cross, corner marks, cutting lines, scissors). Renderers only draw texts and paths, so the conformity of the layout to the style guide is tested once, on the layout, not once per renderer. `renderSVG` is the reference renderer.
+- **PDF** (`attachTo` of `@qr-bill/pdfkit`) draws the same layout in a PDFKit document, at the bottom of the last page or on a new page when the text leaves no room, with Liberation Sans embedded. `drawPaymentSlip` draws it at any position.
 
 ## Source layout
 
@@ -68,7 +70,7 @@ flowchart LR
 | Package           | Depends on      | Notes                                                               |
 | ----------------- | --------------- | ------------------------------------------------------------------- |
 | `@qr-bill/core`   | nothing         | `.` today; `/svg` and `/layout` subpaths next                       |
-| `@qr-bill/pdfkit` | `pdfkit` (peer) | server-side PDF, first adapter                                      |
+| `@qr-bill/pdfkit` | `pdfkit` (peer) | server-side PDF (Node), first adapter; ships Liberation Sans        |
 | `@qr-bill/jspdf`  | `jspdf` (peer)  | browser-side PDF                                                    |
 | `@qr-bill/react`  | `react` (peer)  | later; React Native through `react-native-svg`                      |
 | `@qr-bill/camt`   | —               | later: reconcile ISO 20022 camt.054 bank statements by QR reference |
@@ -95,17 +97,23 @@ flowchart LR
 | ESM only, Node ≥ 22.12                                                                           | `require(esm)` works natively from Node 22.12, so CommonJS consumers are still served.                                                                                                                                                                                                                                                                                                                                 |
 | Shared conformance vectors in JSON                                                               | A future Rust crate reuses them as is, instead of sharing code through WASM (weight, async init, React Native).                                                                                                                                                                                                                                                                                                        |
 | QR encoder adapted from Project Nayuki (MIT), reduced to byte mode, level M and versions 1 to 25 | A careful, widely reused implementation of ISO/IEC 18004 (swissqrbill and qrcode.react use it too), taken from its source, not from another QR-bill library. Writing an encoder from the paid ISO standard would take weeks and risk subtle bugs. Every derived file keeps the MIT notice, and `packages/core/LICENSE` carries it in the published package, whose build removes comments.                              |
+| PDFKit for the first PDF adapter                                                                 | Maintained, flows text over pages and tables (what an invoice needs before its slip), embeds TrueType subsets and takes SVG path data as is. pdf-lib is unmaintained since 2021 and breaks no lines; pdfmake is built on PDFKit and declarative, which makes "at the bottom of the last page if there is room" hard; jsPDF targets the browser and gets its own adapter.                                               |
+| Adapters typed by the methods they call, not by `@types/pdfkit`                                  | `@types/pdfkit` lags behind PDFKit and describes the OpenType features only as an array, which cannot turn kerning off. An interface of the methods it calls accepts a document of any version from 0.17, typed or not; a test runs the oldest one.                                                                                                                                                                    |
+| Liberation Sans shipped unmodified in `@qr-bill/pdfkit`                                          | Its licence (SIL OFL 1.1) reserves the name "Liberation": a font reduced to the characters of the standard would have to be renamed. PDFKit embeds only the glyphs used (a PDF with the slip alone weighs 28 KB), so the 825 KB of the two files stay on the server.                                                                                                                                                   |
+| Kerning and ligatures off in PDF                                                                 | PDFKit applies them by default: "AVAVAV" comes out 9 % narrower than the layout measured, "office" gets a ligature. Off, every text takes the width the layout measured, to 0.05 pt.                                                                                                                                                                                                                                   |
+| The slip ignores the graphics state of the document                                              | It is drawn inside `save`/`restore`, at full opacity, with butt caps and solid lines unless dashed, so a transparency or a dash pattern set by the invoice cannot fade the QR code or dash the corner marks. The current font is not restored: PDFKit has no public way to read it, so the documentation says to select it again.                                                                                      |
+| `@qr-bill/pdfkit` for Node only, at first                                                        | It reads its fonts from its package. In a browser the fonts must come as bytes (the `fonts` option already takes them) or be bundled; the first browser adapter will be jsPDF.                                                                                                                                                                                                                                         |
 
 ## Documentation
 
 - Every exported declaration has a documentation comment: what it does, its parameters, its result, the chapter of the standard, and for most functions an example. Every file starts with a comment that says what it holds.
-- `pnpm docs:build` generates the API reference with [TypeDoc](https://typedoc.org) in `docs/api/` (not versioned), one page per source file. `pnpm docs:watch` rebuilds it on every change. The CI fails when a declaration is not documented or a link is broken.
+- `pnpm docs:build` generates the API reference with [TypeDoc](https://typedoc.org) in `docs/api/` (not versioned), one section per package and one page per source file. `pnpm docs:watch` rebuilds it on every change. The CI fails when a declaration is not documented or a link is broken.
 - `scripts/typedoc-link-by-name.js` lets `{@link name}` point to a declaration of another file, so comments stay short: `{@link validateQRBill}` rather than a path.
 
 ## Known traps (next steps)
 
-- **Fonts in PDF.** The standard PDF Helvetica (WinAnsi) cannot render Latin Extended-A (ł, ő, Ș…), which v2.3+ allows. PDF adapters embed Liberation Sans, the font the layout is measured with.
-- **Space for the payment part.** `attachTo` must check that 105 mm are free at the bottom of the last page and add a page otherwise.
+- **Fonts in PDF.** The standard PDF Helvetica (WinAnsi) cannot render the extended character set (ł, ő, Ș…), which v2.3+ allows. Every PDF adapter must embed Liberation Sans, the font the layout is measured with, without kerning.
+- **Kerning in SVG.** Browsers and resvg kern SVG text, so some lines come out slightly narrower than the layout measured. `renderSVG` could turn it off as the PDF adapter does.
 
 ## Quality gates
 
@@ -114,6 +122,7 @@ flowchart LR
 - Documentation examples: every one-line example of the documentation comments (`validateCountry('ß'); // 'invalid_country'`) is run by the tests.
 - Public API: a test lists every export, so adding or removing one is a visible decision.
 - Layout: the dimensions of the style guide are tested one by one; no text leaves its section, for the six examples in the five languages and for random bills at the maximum lengths; the SVG of every example is rasterised (resvg) and its QR code, Swiss cross included, read back by ZXing.
+- PDF: the PDF is read back with pdfjs, and every text of the six examples in the five languages is at its position to 0.005 pt, in its font, size and measured width; the paths are compared pixel by pixel with the SVG renderer; the QR code is read back by ZXing from the rasterised PDF; the oldest PDFKit supported (0.17.0) draws the same slip.
 - QR codes: every generated QR code is read back by a real decoder (ZXing, through `zxing-wasm`), and compared module by module with the original encoder of Project Nayuki, kept unmodified in `test/qr-code/reference/` as a witness: the reduction changes nothing, the choice of the mask included.
 - Tree shaking: a test bundles a single import (`isValidIBAN`) and checks that the rest of the library is left out.
 - 100 % coverage enforced; lint with `typescript-eslint` `strictTypeChecked`; formatting with Prettier.
