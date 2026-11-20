@@ -1,0 +1,13 @@
+{
+  // Type-checks the invoice against the sources of the core, so that no build is needed first. The data and the
+  // computation use no Node or DOM API, like the core: they can run in a browser, to check a form.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": [],
+    "noEmit": true,
+    "paths": {
+      "@qr-bill/core": ["../core/src/index.ts"]
+    }
+  },
+  "include": ["src"]
+}

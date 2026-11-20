@@ -1,0 +1,51 @@
+{
+  "name": "@qr-bill/invoice",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Swiss invoices with a QR-bill: an A4 invoice with your logo, items, VAT and the payment part, from your data, in five languages, following the SIX Implementation Guidelines v2.4.",
+  "keywords": [
+    "qr-bill",
+    "qr-rechnung",
+    "qr-facture",
+    "qr-fattura",
+    "invoice",
+    "rechnung",
+    "facture",
+    "swiss",
+    "vat",
+    "mwst",
+    "pdf",
+    "pdfkit"
+  ],
+  "license": "MIT",
+  "author": "Olivier Azevedo <hello@claine.ai> (https://claine.ai)",
+  "homepage": "https://github.com/qr-bill/qr-bill/tree/main/packages/invoice#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qr-bill/qr-bill.git",
+    "directory": "packages/invoice"
+  },
+  "bugs": "https://github.com/qr-bill/qr-bill/issues",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit",
+    "check:package": "publint && attw --pack --profile esm-only",
+    "prepublishOnly": "node ../../scripts/check-release-blockers.js"
+  },
+  "dependencies": {
+    "@qr-bill/core": "workspace:^"
+  }
+}
