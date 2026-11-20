@@ -77,6 +77,12 @@ importers:
 
   packages/core: {}
 
+  packages/invoice:
+    dependencies:
+      '@qr-bill/core':
+        specifier: workspace:^
+        version: link:../core
+
   packages/pdfkit:
     dependencies:
       '@qr-bill/core':

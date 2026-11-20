@@ -1,0 +1,10 @@
+{
+  // Builds against the published form of the core (its dist, built first): @qr-bill/core stays an external
+  // dependency instead of being copied into the invoice.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": [],
+    "noEmit": true
+  },
+  "include": ["src"]
+}

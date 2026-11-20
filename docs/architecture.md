@@ -8,7 +8,7 @@
 4. **Be trustworthy for money**: no floating-point amounts, every rule of the standard tested, reproducible builds, provenance on every release.
 5. **Be readable**: one folder per concept of the standard, every exported function documented with its parameters, result and an example that the tests run.
 
-Non-goals: generating whole invoices (the caller owns the invoice layout; we add the payment part to it), eBill.
+Non-goals: eBill. A whole invoice is `@qr-bill/invoice`, a package of its own on top of the core: the core and the PDF adapter only produce the payment part, and add it to documents laid out by the caller.
 
 ## Pipeline
 
@@ -65,15 +65,29 @@ flowchart LR
 
 `index.ts` only re-exports the public API. Tests mirror the folders in `packages/core/test`.
 
+`packages/invoice/src` follows the same rule:
+
+| Folder     | Concept                                                                              |
+| ---------- | ------------------------------------------------------------------------------------ |
+| `invoice/` | The invoice as a whole: its types, its limits, its validation and its payment part   |
+| `parties/` | The issuer and the recipient, with the address rules of the QR-bill, the logo        |
+| `items/`   | The lines                                                                            |
+| `amounts/` | Exact decimal numbers, the totals and the VAT, totals given by the caller            |
+| `uid/`     | The Swiss business identification number (UID)                                       |
+| `labels/`  | Texts printed on the invoice, in five languages                                      |
+| `themes/`  | One file per theme (`standard.ts`, `business.ts`, `modern.ts`), colours and contrast |
+| `fields/`  | Reading the fields of an input given as `unknown`, shared by the validators          |
+
 ## Packages
 
-| Package           | Depends on      | Notes                                                               |
-| ----------------- | --------------- | ------------------------------------------------------------------- |
-| `@qr-bill/core`   | nothing         | `.` today; `/svg` and `/layout` subpaths next                       |
-| `@qr-bill/pdfkit` | `pdfkit` (peer) | server-side PDF (Node), first adapter; ships Liberation Sans        |
-| `@qr-bill/jspdf`  | `jspdf` (peer)  | browser-side PDF                                                    |
-| `@qr-bill/react`  | `react` (peer)  | later; React Native through `react-native-svg`                      |
-| `@qr-bill/camt`   | —               | later: reconcile ISO 20022 camt.054 bank statements by QR reference |
+| Package            | Depends on      | Notes                                                                                                                |
+| ------------------ | --------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `@qr-bill/core`    | nothing         | `.` today; `/svg` and `/layout` subpaths next                                                                        |
+| `@qr-bill/pdfkit`  | `pdfkit` (peer) | server-side PDF (Node), first adapter; ships Liberation Sans                                                         |
+| `@qr-bill/invoice` | `@qr-bill/core` | A4 invoice with its QR-bill, from data; in progress (data and amounts ready, PDF next), see [invoice.md](invoice.md) |
+| `@qr-bill/jspdf`   | `jspdf` (peer)  | browser-side PDF                                                                                                     |
+| `@qr-bill/react`   | `react` (peer)  | later; React Native through `react-native-svg`                                                                       |
+| `@qr-bill/camt`    | —               | later: reconcile ISO 20022 camt.054 bank statements by QR reference                                                  |
 
 ## Decisions
 
@@ -98,6 +112,7 @@ flowchart LR
 | Shared conformance vectors in JSON                                                                          | A future Rust crate reuses them as is, instead of sharing code through WASM (weight, async init, React Native).                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | QR encoder adapted from Project Nayuki (MIT), reduced to byte mode, level M and versions 1 to 25            | A careful, widely reused implementation of ISO/IEC 18004 (swissqrbill and qrcode.react use it too), taken from its source, not from another QR-bill library. Writing an encoder from the paid ISO standard would take weeks and risk subtle bugs. Every derived file keeps the MIT notice, and `packages/core/LICENSE` carries it in the published package, whose build removes comments.                                                                                                                                                                                                     |
 | Release pull request by hand, staging by a workflow when a version of `main` is not on npm, approval on npm | The maintainer decides twice: by merging a release pull request they reviewed, versions and changelogs included, then by approving the staged versions on npmjs.com with two-factor authentication, which npm recommends for Trusted Publishing. A compromised GitHub account or workflow can stage, never publish. The workflow compares the versions with npm and keeps a draft GitHub release per staged version, so a run that failed halfway can simply be run again. Unlike the bot pull request of `changesets/action`, it needs no GitHub App holding write access to the repository. |
+| An invoice checks the form of its data, not its content                                                     | `@qr-bill/invoice` must always produce the invoice the caller asks for: an invoice blocked because a legal mention is missing helps no one. It checks types, lengths (so that nothing overflows), numbers, dates, the UID and the e-mail, and the QR-bill of the payment part, the only thing whose error would make a payment go astray. The addresses follow the rules of the QR-bill since they are also its creditor and debtor. What Swiss law asks of an invoice is explained in its documentation, not enforced.                                                                       |
 | PDFKit for the first PDF adapter                                                                            | Maintained, flows text over pages and tables (what an invoice needs before its slip), embeds TrueType subsets and takes SVG path data as is. pdf-lib is unmaintained since 2021 and breaks no lines; pdfmake is built on PDFKit and declarative, which makes "at the bottom of the last page if there is room" hard; jsPDF targets the browser and gets its own adapter.                                                                                                                                                                                                                      |
 | Adapters typed by the methods they call, not by `@types/pdfkit`                                             | `@types/pdfkit` lags behind PDFKit and describes the OpenType features only as an array, which cannot turn kerning off. An interface of the methods it calls accepts a document of any version from 0.17, typed or not; a test runs the oldest one.                                                                                                                                                                                                                                                                                                                                           |
 | Liberation Sans shipped unmodified in `@qr-bill/pdfkit`                                                     | Its licence (SIL OFL 1.1) reserves the name "Liberation": a font reduced to the characters of the standard would have to be renamed. PDFKit embeds only the glyphs used (a PDF with the slip alone weighs 28 KB), so the 825 KB of the two files stay on the server.                                                                                                                                                                                                                                                                                                                          |

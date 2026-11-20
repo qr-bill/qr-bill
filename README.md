@@ -102,11 +102,12 @@ The maximum lengths are exported too (`ADDRESS_MAX_LENGTH.name` is 70), for the 
 
 ## Packages
 
-| Package                              | Status      | Purpose                                               |
-| ------------------------------------ | ----------- | ----------------------------------------------------- |
-| [`@qr-bill/core`](packages/core)     | in progress | Validation, payload, references, parsing, layout, SVG |
-| [`@qr-bill/pdfkit`](packages/pdfkit) | in progress | Payment slip in a PDFKit document (Node)              |
-| `@qr-bill/jspdf`                     | planned     | Payment slip in a jsPDF document (browser)            |
+| Package                               | Status      | Purpose                                               |
+| ------------------------------------- | ----------- | ----------------------------------------------------- |
+| [`@qr-bill/core`](packages/core)      | in progress | Validation, payload, references, parsing, layout, SVG |
+| [`@qr-bill/pdfkit`](packages/pdfkit)  | in progress | Payment slip in a PDFKit document (Node)              |
+| [`@qr-bill/invoice`](docs/invoice.md) | in progress | A4 invoice with its QR-bill, from data                |
+| `@qr-bill/jspdf`                      | planned     | Payment slip in a jsPDF document (browser)            |
 
 ## Quality
 
