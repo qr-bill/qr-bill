@@ -7,6 +7,7 @@
 
 <p align="center">
   <a href="https://github.com/qr-bill/qr-bill/actions/workflows/ci.yml"><img src="https://github.com/qr-bill/qr-bill/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://www.npmjs.com/package/@qr-bill/pdfkit"><img src="https://img.shields.io/npm/v/@qr-bill/pdfkit" alt="npm version of @qr-bill/pdfkit" /></a>
   <a href="https://github.com/qr-bill/qr-bill/blob/main/vitest.config.ts"><img src="https://img.shields.io/badge/coverage-100%25-brightgreen" alt="Coverage: 100 %" /></a>
   <a href="https://github.com/qr-bill/qr-bill/blob/main/LICENSE"><img src="https://img.shields.io/github/license/qr-bill/qr-bill" alt="License: MIT" /></a>
 </p>

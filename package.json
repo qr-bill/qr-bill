@@ -19,7 +19,9 @@
     "docs:watch": "typedoc --watch",
     "check:docs": "typedoc --emit none",
     "check:package": "pnpm --recursive check:package",
-    "changeset": "changeset"
+    "changeset": "changeset",
+    "release:plan": "node scripts/release.js plan",
+    "release:publish": "node scripts/release.js publish"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
