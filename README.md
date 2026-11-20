@@ -14,9 +14,9 @@
 
 Swiss QR-bill (QR-Rechnung, QR-facture, QR-fattura, Quint QR) for JavaScript and TypeScript, following the [SIX Implementation Guidelines v2.4](https://www.six-group.com/en/products-services/banking-services/payment-standardization/standards/qr-bill.html), in force since 14 November 2026.
 
-<!-- release-blocker: remove this banner and this comment before the first npm release -->
-
-> **Status: work in progress, not published yet.** The core (validation, Swiss QR Code, references, layout of the payment slip, SVG) and the PDFKit adapter are done and fully tested.
+<p align="center">
+  <img src="docs/assets/payment-slip.svg" alt="Payment slip of a QR-bill: the receipt on the left, the payment part with the Swiss QR Code on the right" width="800" />
+</p>
 
 - **Runs everywhere.** No Node or DOM API in the core: browsers, Node, Deno, Bun, Cloudflare Workers, React Native.
 - **Zero dependencies** in the core. PDF engines live in separate adapters. An application only carries what it imports: `isValidIBAN` alone is 340 bytes once bundled.

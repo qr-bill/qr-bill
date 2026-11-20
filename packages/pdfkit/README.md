@@ -13,9 +13,9 @@
 
 The Swiss QR-bill payment slip (receipt and payment part) in a [PDFKit](https://pdfkit.org) document, following the [SIX Implementation Guidelines v2.4](https://www.six-group.com/en/products-services/banking-services/payment-standardization/standards/qr-bill.html) and their style guide. Built on [`@qr-bill/core`](https://github.com/qr-bill/qr-bill/tree/main/packages/core).
 
-<!-- release-blocker: remove this banner and this comment before the first npm release -->
-
-> **Status: work in progress, not published yet.**
+<p align="center">
+  <img src="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/payment-slip.svg" alt="Payment slip of a QR-bill: the receipt on the left, the payment part with the Swiss QR Code on the right" width="800" />
+</p>
 
 - **One call.** `attachTo(doc, bill, { language })` adds the slip at the bottom of the last page, or on a new page when the invoice leaves no room for it.
 - **Exactly the layout of the core.** Every text and line is drawn where `layoutQRBill` puts it; the tests read the PDF back and check each text to a hundredth of a point, in the six examples of the standard and the five languages.
