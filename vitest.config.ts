@@ -8,6 +8,9 @@ export default defineConfig({
   },
   test: {
     include: ['packages/*/test/**/*.test.ts'],
+    // Property-based tests and rasterisations take about a second alone, several times more when they run in parallel on
+    // a busy machine: 30 s instead of 5 still catches a test that hangs.
+    testTimeout: 30_000,
     coverage: {
       provider: 'v8',
       include: ['packages/*/src/**/*.ts'],

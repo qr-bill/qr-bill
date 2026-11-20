@@ -119,6 +119,7 @@ flowchart LR
 
 - Conformance: the six examples of Annex A, payload line by line, in LF and CR LF.
 - Property-based tests: check digits detect every single-digit error, amounts round-trip through cents, sanitized text is always valid, any generated bill parses back to itself.
+- README image: the payment slip shown at the top of the READMEs is the SVG the code draws for example 2, compared with the file by a test.
 - Documentation examples: every one-line example of the documentation comments (`validateCountry('ß'); // 'invalid_country'`) is run by the tests.
 - Public API: a test lists every export, so adding or removing one is a visible decision.
 - Layout: the dimensions of the style guide are tested one by one; no text leaves its section, for the six examples in the five languages and for random bills at the maximum lengths; the SVG of every example is rasterised (resvg) and its QR code, Swiss cross included, read back by ZXing.
