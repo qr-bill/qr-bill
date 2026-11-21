@@ -1,7 +1,6 @@
 {
   "name": "@qr-bill/invoice",
   "version": "0.0.0",
-  "private": true,
   "description": "Swiss invoices with a QR-bill: an A4 invoice with your logo, items, VAT and the payment part, from your data, in five languages, following the SIX Implementation Guidelines v2.4.",
   "keywords": [
     "qr-bill",
