@@ -34,7 +34,7 @@ Swiss QR-bill (QR-Rechnung, QR-facture, QR-fattura, Quint QR) for JavaScript and
 - [Getting started](#example): a QR-bill, its Swiss QR Code and its payment slip as SVG.
 - [Validate a form, field by field](#validate-a-form-field-by-field), with the rules of the standard.
 - [The payment slip in a PDF](https://github.com/qr-bill/qr-bill/blob/main/docs/pdfkit.md), with PDFKit: `@qr-bill/pdfkit`.
-- [Invoices](https://github.com/qr-bill/qr-bill/blob/main/docs/invoice.md): an A4 invoice with its QR-bill, from your data: `@qr-bill/invoice`, in this repository, on npm from its next release.
+- [Invoices](https://github.com/qr-bill/qr-bill/blob/main/docs/invoice.md): an A4 invoice with its QR-bill, from your data: `@qr-bill/invoice`.
 - The API reference: every export is documented in the code with an example, shown by your editor.
 - [Architecture](https://github.com/qr-bill/qr-bill/blob/main/docs/architecture.md), the design and its decisions; [contributing](https://github.com/qr-bill/qr-bill/blob/main/CONTRIBUTING.md).
 
@@ -92,7 +92,7 @@ Options, fonts and how to write your own invoice above the slip: [docs/pdfkit.md
 
 ## Invoices
 
-[`@qr-bill/invoice`](https://github.com/qr-bill/qr-bill/blob/main/docs/invoice.md) writes a complete A4 invoice from your data: your logo and details, the address window, the lines with their VAT, the totals, ready-made mentions, and the payment slip at the bottom of the last page. In five languages and three themes. It is in this repository, and on npm from its next release.
+[`@qr-bill/invoice`](https://github.com/qr-bill/qr-bill/blob/main/docs/invoice.md) writes a complete A4 invoice from your data: your logo and details, the address window, the lines with their VAT, the totals, ready-made mentions, and the payment slip at the bottom of the last page. In five languages and three themes. Install it with `npm install @qr-bill/invoice pdfkit`.
 
 <p align="center">
   <a href="https://github.com/qr-bill/qr-bill/blob/main/docs/assets/invoice-business.pdf"><img src="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/invoice-business.png" alt="An invoice in English in the business theme, with its payment slip at the bottom of the page" width="600" /></a>
@@ -157,12 +157,12 @@ The maximum lengths are exported too (`ADDRESS_MAX_LENGTH.name` is 70), for the 
 
 ## Packages
 
-| Package                                                                             | Version                                                                                               | Documentation                                                                   | Purpose                                               |
-| ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| `@qr-bill/core`                                                                     | [![npm](https://img.shields.io/npm/v/@qr-bill/core)](https://www.npmjs.com/package/@qr-bill/core)     | [Getting started](#example)                                                     | Validation, payload, references, parsing, layout, SVG |
-| [`@qr-bill/pdfkit`](https://github.com/qr-bill/qr-bill/tree/main/packages/pdfkit)   | [![npm](https://img.shields.io/npm/v/@qr-bill/pdfkit)](https://www.npmjs.com/package/@qr-bill/pdfkit) | [docs/pdfkit.md](https://github.com/qr-bill/qr-bill/blob/main/docs/pdfkit.md)   | Payment slip in a PDFKit document (Node)              |
-| [`@qr-bill/invoice`](https://github.com/qr-bill/qr-bill/tree/main/packages/invoice) | next release                                                                                          | [docs/invoice.md](https://github.com/qr-bill/qr-bill/blob/main/docs/invoice.md) | A4 invoice with its QR-bill, from data, as a PDF      |
-| `@qr-bill/jspdf`                                                                    | planned                                                                                               | —                                                                               | Payment slip in a jsPDF document (browser)            |
+| Package                                                                             | Version                                                                                                 | Documentation                                                                   | Purpose                                               |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `@qr-bill/core`                                                                     | [![npm](https://img.shields.io/npm/v/@qr-bill/core)](https://www.npmjs.com/package/@qr-bill/core)       | [Getting started](#example)                                                     | Validation, payload, references, parsing, layout, SVG |
+| [`@qr-bill/pdfkit`](https://github.com/qr-bill/qr-bill/tree/main/packages/pdfkit)   | [![npm](https://img.shields.io/npm/v/@qr-bill/pdfkit)](https://www.npmjs.com/package/@qr-bill/pdfkit)   | [docs/pdfkit.md](https://github.com/qr-bill/qr-bill/blob/main/docs/pdfkit.md)   | Payment slip in a PDFKit document (Node)              |
+| [`@qr-bill/invoice`](https://github.com/qr-bill/qr-bill/tree/main/packages/invoice) | [![npm](https://img.shields.io/npm/v/@qr-bill/invoice)](https://www.npmjs.com/package/@qr-bill/invoice) | [docs/invoice.md](https://github.com/qr-bill/qr-bill/blob/main/docs/invoice.md) | A4 invoice with its QR-bill, from data, as a PDF      |
+| `@qr-bill/jspdf`                                                                    | planned                                                                                                 | —                                                                               | Payment slip in a jsPDF document (browser)            |
 
 ## Quality
 
