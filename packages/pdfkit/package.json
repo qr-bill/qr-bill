@@ -1,6 +1,6 @@
 {
   "name": "@qr-bill/pdfkit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Swiss QR-bill (QR-Rechnung, QR-facture) for PDFKit: adds the receipt and the payment part at the bottom of the last page, following the SIX Implementation Guidelines v2.4 and the style guide.",
   "keywords": [
     "qr-bill",

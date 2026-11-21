@@ -90,7 +90,7 @@ The body of the invoice is yours: PDFKit writes it, over as many pages as it nee
 
 - **Select your font again** after `attachTo` if you write anything else, for instance a page number on every page.
 
-For a complete invoice from data, letterhead, lines, VAT and totals included, see [`@qr-bill/invoice`](invoice.md) (coming soon), which is built on this adapter.
+For a complete invoice from data, letterhead, lines, VAT and totals included, see [`@qr-bill/invoice`](invoice.md), which is built on this adapter.
 
 ## Fonts
 

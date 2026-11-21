@@ -1,5 +1,12 @@
 # @qr-bill/core
 
+## 0.1.1
+
+### Patch Changes
+
+- cd6724c: The logo at the top of the README is readable on a dark background, on npm too, and the README of the core shows the invoices `@qr-bill/invoice` draws.
+- e378d1d: The README links to the complete documentation: the payment slip in a PDF (`docs/pdfkit.md`), the validation of forms, the invoices, and the documents of SIX.
+
 ## 0.1.0
 
 ### Minor Changes
