@@ -1,7 +1,8 @@
 <h1 align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo-white.svg" />
-    <img src="docs/assets/logo-black.svg" alt="qr-bill" height="72" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/logo-white.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/logo-black.svg" />
+    <img src="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/logo-auto.svg" alt="qr-bill" height="72" />
   </picture>
 </h1>
 
@@ -33,7 +34,7 @@ Swiss QR-bill (QR-Rechnung, QR-facture, QR-fattura, Quint QR) for JavaScript and
 - [Getting started](#example): a QR-bill, its Swiss QR Code and its payment slip as SVG.
 - [Validate a form, field by field](#validate-a-form-field-by-field), with the rules of the standard.
 - [The payment slip in a PDF](docs/pdfkit.md), with PDFKit: `@qr-bill/pdfkit`.
-- [Invoices](docs/invoice.md): an A4 invoice with its QR-bill, from your data: `@qr-bill/invoice`, coming soon.
+- [Invoices](docs/invoice.md): an A4 invoice with its QR-bill, from your data: `@qr-bill/invoice`, in this repository, on npm from its next release.
 - The API reference: every export is documented in the code with an example, and `pnpm docs:build` generates the reference in `docs/api/`.
 - [Architecture](docs/architecture.md), the design and its decisions; [releasing](docs/releasing.md), how a version gets to npm; [contributing](CONTRIBUTING.md).
 
@@ -89,6 +90,47 @@ attachTo(doc, bill, { language: 'fr' }); // at the bottom of the last page, or o
 
 Options, fonts and how to write your own invoice above the slip: [docs/pdfkit.md](docs/pdfkit.md).
 
+## Invoices
+
+[`@qr-bill/invoice`](docs/invoice.md) writes a complete A4 invoice from your data: your logo and details, the address window, the lines with their VAT, the totals, ready-made mentions, and the payment slip at the bottom of the last page. In five languages and three themes. It is in this repository, and on npm from its next release.
+
+<p align="center">
+  <a href="docs/assets/invoice-business.pdf"><img src="docs/assets/invoice-business.png" alt="An invoice in English in the business theme, with its payment slip at the bottom of the page" width="600" /></a>
+</p>
+<p align="center">
+  <a href="docs/assets/invoice-standard.pdf"><img src="docs/assets/invoice-standard.png" alt="An invoice in French in the standard theme" width="290" /></a>
+  <a href="docs/assets/invoice-modern.pdf"><img src="docs/assets/invoice-modern.png" alt="An invoice in German in the modern theme" width="290" /></a>
+</p>
+<p align="center">The themes <code>business</code>, <code>standard</code> and <code>modern</code>: each invoice opens as a PDF.</p>
+
+```ts
+import { createInvoicePDF } from '@qr-bill/invoice';
+
+const pdf = await createInvoicePDF({
+  language: 'en',
+  theme: 'business',
+  date: '2026-11-20',
+  issuer: {
+    name: 'Max Muster & Söhne',
+    street: 'Musterstrasse',
+    buildingNumber: '123',
+    postalCode: '8000',
+    town: 'Seldwyla',
+    country: 'CH',
+  },
+  recipient: {
+    name: 'Pia-Maria Rutschmann-Schnyder',
+    street: 'Grosse Marktgasse',
+    buildingNumber: '28',
+    postalCode: '9400',
+    town: 'Rorschach',
+    country: 'CH',
+  },
+  items: [{ description: 'Development of the new website', quantity: 24, unit: 'h', unitPrice: '150', vatRate: '8.1' }],
+  payment: { account: 'CH44 3199 9123 0008 8901 2', reference: '210000000003139471430009017' },
+}); // the bytes of the PDF
+```
+
 ## Validate a form, field by field
 
 Each field of the QR-bill has its validator. It takes the value as typed and returns `true`/`false` when there are two outcomes, or a status naming the problem, ready to be translated:
@@ -119,7 +161,7 @@ The maximum lengths are exported too (`ADDRESS_MAX_LENGTH.name` is 70), for the 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------------- |
 | [`@qr-bill/core`](packages/core)       | [![npm](https://img.shields.io/npm/v/@qr-bill/core)](https://www.npmjs.com/package/@qr-bill/core)     | [Getting started](#example)        | Validation, payload, references, parsing, layout, SVG |
 | [`@qr-bill/pdfkit`](packages/pdfkit)   | [![npm](https://img.shields.io/npm/v/@qr-bill/pdfkit)](https://www.npmjs.com/package/@qr-bill/pdfkit) | [docs/pdfkit.md](docs/pdfkit.md)   | Payment slip in a PDFKit document (Node)              |
-| [`@qr-bill/invoice`](packages/invoice) | coming soon                                                                                           | [docs/invoice.md](docs/invoice.md) | A4 invoice with its QR-bill, from data, as a PDF      |
+| [`@qr-bill/invoice`](packages/invoice) | next release                                                                                          | [docs/invoice.md](docs/invoice.md) | A4 invoice with its QR-bill, from data, as a PDF      |
 | `@qr-bill/jspdf`                       | planned                                                                                               | —                                  | Payment slip in a jsPDF document (browser)            |
 
 ## Quality

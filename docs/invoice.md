@@ -2,6 +2,12 @@
 
 A Swiss invoice on A4 with its QR-bill, from your data: your logo and details, the recipient in the window of the envelope, the lines, the VAT and the totals, a few ready-made mentions, and the payment part at the bottom of the last page.
 
+<p align="center">
+  <a href="assets/invoice-business.pdf"><img src="assets/invoice-business.png" alt="An invoice in English in the business theme, with its payment slip at the bottom of the page" width="600" /></a>
+</p>
+
+The same invoice as a [PDF](assets/invoice-business.pdf); the other themes: [standard](assets/invoice-standard.pdf), in French, and [modern](assets/invoice-modern.pdf), in German.
+
 > **Work in progress.** The data, its validation, the amounts and the PDF are ready; the complete documentation and the first publication come next. The package is not on npm yet.
 
 ## Principles

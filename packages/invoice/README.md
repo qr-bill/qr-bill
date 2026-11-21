@@ -1,11 +1,16 @@
 <h1 align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/logo-white.svg" />
-    <img src="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/logo-black.svg" alt="qr-bill" height="72" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/logo-black.svg" />
+    <img src="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/logo-auto.svg" alt="qr-bill" height="72" />
   </picture>
 </h1>
 
 A Swiss invoice on A4 with its QR-bill, from your data: your logo and details, the recipient in the window of the envelope, the lines, the VAT and the totals, a few ready-made mentions, and the payment part at the bottom of the last page. In German, French, Italian, Romansh and English. Built on [`@qr-bill/core`](https://github.com/qr-bill/qr-bill/tree/main/packages/core).
+
+<p align="center">
+  <a href="https://github.com/qr-bill/qr-bill/blob/main/docs/assets/invoice-business.pdf"><img src="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/invoice-business.png" alt="An invoice in English in the business theme, with its payment slip at the bottom of the page" width="600" /></a>
+</p>
 
 <!-- release-blocker: remove this banner and this comment before the first npm release -->
 
