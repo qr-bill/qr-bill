@@ -1,7 +1,8 @@
 <h1 align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/logo-white.svg" />
-    <img src="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/logo-black.svg" alt="qr-bill" height="72" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/logo-black.svg" />
+    <img src="https://raw.githubusercontent.com/qr-bill/qr-bill/main/docs/assets/logo-auto.svg" alt="qr-bill" height="72" />
   </picture>
 </h1>
 
