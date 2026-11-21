@@ -63,30 +63,14 @@ attachTo(doc, bill, { language: 'fr' }); // { newPage: false }, or true when a p
 doc.end();
 ```
 
-### What `attachTo` does
+## Documentation
 
-- It needs the 105 mm of the slip at the bottom of the current page, plus what the cutting lines draw above it (1.3 mm for the scissors), below the text cursor (`doc.y`). Otherwise it adds a page of the same size and margins.
-- The slip sits on the lower edge of the page, as the standard requires, and is centred: on A4 it spans the whole width. A page narrower than 210 mm throws a `RangeError`.
-- Afterwards the text cursor is at the bottom of the page, so text written next goes to a new page. The current font of the document is Liberation Sans: select yours again before writing more text. The rest of the graphics state (colors, opacity, line style) is left as it was.
-- Options: `language` (`'de'`, `'fr'`, `'it'`, `'rm'` or `'en'`), `separators` (`'scissors'` by default, `'text'` for the instruction "Separate before paying in", `'none'` for perforated paper) and `fonts`.
+The complete documentation is in [docs/pdfkit.md](https://github.com/qr-bill/qr-bill/blob/main/docs/pdfkit.md):
 
-### A slip anywhere
-
-`drawPaymentSlip(doc, layout, { x, y })` draws a slip laid out by `layoutQRBill` at a position of your choice, in points, without checking the room left: for a page of its own (210 × 105 mm) or a layout of your own.
-
-```ts
-import { layoutQRBill } from '@qr-bill/core';
-import { POINTS_PER_MM, drawPaymentSlip } from '@qr-bill/pdfkit';
-
-const doc = new PDFDocument({ size: [210 * POINTS_PER_MM, 105 * POINTS_PER_MM], margin: 0 });
-drawPaymentSlip(doc, layoutQRBill(bill, { language: 'de', separators: 'none' }), { x: 0, y: 0 });
-```
-
-## Fonts
-
-The package ships Liberation Sans Regular and Bold 2.1.5, unmodified, under the [SIL Open Font License 1.1](fonts/LICENSE). The core measures every text with the widths of this font, so that lines are broken and shortened the same way in every runtime; kerning and ligatures are turned off for the same reason.
-
-To embed other files, pass them as `fonts: { regular, bold }` (`Uint8Array`, TrueType or OpenType). They must have the widths of Liberation Sans, as Arial does: the layout is not measured again.
+- [what `attachTo` does](https://github.com/qr-bill/qr-bill/blob/main/docs/pdfkit.md#what-attachto-does), and its options;
+- [a slip anywhere](https://github.com/qr-bill/qr-bill/blob/main/docs/pdfkit.md#a-slip-anywhere) with `drawPaymentSlip`;
+- [your own invoice above the slip](https://github.com/qr-bill/qr-bill/blob/main/docs/pdfkit.md#your-own-invoice-above-the-slip), in the same fonts with `registerFonts`;
+- [the fonts](https://github.com/qr-bill/qr-bill/blob/main/docs/pdfkit.md#fonts), and how to embed others.
 
 ## License
 
