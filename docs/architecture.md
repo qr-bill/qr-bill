@@ -67,16 +67,23 @@ flowchart LR
 
 `packages/invoice/src` follows the same rule:
 
-| Folder     | Concept                                                                              |
-| ---------- | ------------------------------------------------------------------------------------ |
-| `invoice/` | The invoice as a whole: its types, its limits, its validation and its payment part   |
-| `parties/` | The issuer and the recipient, with the address rules of the QR-bill, the logo        |
-| `items/`   | The lines                                                                            |
-| `amounts/` | Exact decimal numbers, the totals and the VAT, totals given by the caller            |
-| `uid/`     | The Swiss business identification number (UID)                                       |
-| `labels/`  | Texts printed on the invoice, in five languages                                      |
-| `themes/`  | One file per theme (`standard.ts`, `business.ts`, `modern.ts`), colours and contrast |
-| `fields/`  | Reading the fields of an input given as `unknown`, shared by the validators          |
+| Folder     | Concept                                                                                                  |
+| ---------- | -------------------------------------------------------------------------------------------------------- |
+| `invoice/` | The invoice as a whole: its types, its limits, its validation and its payment part                       |
+| `parties/` | The issuer and the recipient, with the address rules of the QR-bill, the logo, the address lines printed |
+| `items/`   | The lines                                                                                                |
+| `amounts/` | Exact decimal numbers, the totals and the VAT, totals given by the caller                                |
+| `uid/`     | The Swiss business identification number (UID)                                                           |
+| `labels/`  | Texts printed on the invoice, in five languages                                                          |
+| `themes/`  | One file per theme (`standard.ts`, `business.ts`, `modern.ts`), colours and contrast                     |
+| `fields/`  | Reading the fields of an input given as `unknown`, shared by the validators                              |
+| `drawing/` | Drawing on a PDFKit document in millimetres, fitting texts in their zones                                |
+| `page/`    | The A4 page: its geometry, the flow from page to page, the bar and the page numbers                      |
+| `header/`  | The letterhead, the issuer's details, the address window, the header of later pages                      |
+| `details/` | The title, the grid of details, the subject and the introduction                                         |
+| `table/`   | The table of the lines: its columns, its rows, its pages                                                 |
+| `summary/` | Under the table: the totals, the mentions and remarks, the closing text                                  |
+| `pdf/`     | `createInvoicePDF`: the parts drawn in order, then the payment slip                                      |
 
 ## Packages
 

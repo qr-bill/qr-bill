@@ -1,12 +1,13 @@
 {
-  // Type-checks the invoice against the sources of the core, so that no build is needed first. The data and the
-  // computation use no Node or DOM API, like the core: they can run in a browser, to check a form.
+  // Type-checks the invoice against the sources of the core and of the PDFKit adapter, so that no build is needed
+  // first. The PDF is written on Node, like the adapter, which reads its fonts from its package.
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "types": [],
+    "types": ["node"],
     "noEmit": true,
     "paths": {
-      "@qr-bill/core": ["../core/src/index.ts"]
+      "@qr-bill/core": ["../core/src/index.ts"],
+      "@qr-bill/pdfkit": ["../pdfkit/src/index.ts"]
     }
   },
   "include": ["src"]

@@ -6,14 +6,11 @@
  */
 
 import type { PathElement, QRBillLayout, TextElement } from '@qr-bill/core';
-import { defaultFonts } from './fonts.js';
-import type { DrawOptions, PDFKitDocument } from './pdfkit.types.js';
+import { registerFonts } from './fonts.js';
+import type { DrawOptions, PDFKitDocument, RegisteredFonts } from './pdfkit.types.js';
 
 /** Points in a millimetre: a point is 1/72 inch, an inch 25.4 mm. */
 export const POINTS_PER_MM: number = 72 / 25.4;
-
-/** Names the fonts are registered under, chosen not to collide with the fonts of the document. */
-const FONT_NAMES = { regular: 'QRBill-LiberationSans', bold: 'QRBill-LiberationSans-Bold' } as const;
 
 /** Draws a path of the layout, in a frame in millimetres whose origin is the top left corner of the slip. */
 function drawPath(doc: PDFKitDocument, element: PathElement, x: number, y: number): void {
@@ -38,8 +35,8 @@ function drawPath(doc: PDFKitDocument, element: PathElement, x: number, y: numbe
  * Writes a text of the layout, in black, its baseline at its position. Kerning and ligatures are turned off, which
  * PDFKit applies by default: the text then takes exactly the width the layout measured.
  */
-function drawText(doc: PDFKitDocument, element: TextElement, x: number, y: number): void {
-  doc.font(element.fontWeight === 'bold' ? FONT_NAMES.bold : FONT_NAMES.regular);
+function drawText(doc: PDFKitDocument, element: TextElement, x: number, y: number, fonts: RegisteredFonts): void {
+  doc.font(element.fontWeight === 'bold' ? fonts.bold : fonts.regular);
   doc.fontSize(element.fontSize);
   doc.fillColor('black');
   doc.text(element.text, x + element.x * POINTS_PER_MM, y + element.y * POINTS_PER_MM, {
@@ -68,9 +65,7 @@ function drawText(doc: PDFKitDocument, element: TextElement, x: number, y: numbe
  * ```
  */
 export function drawPaymentSlip(doc: PDFKitDocument, layout: QRBillLayout, options: DrawOptions): void {
-  const fonts = options.fonts ?? defaultFonts();
-  doc.registerFont(FONT_NAMES.regular, fonts.regular);
-  doc.registerFont(FONT_NAMES.bold, fonts.bold);
+  const fonts = registerFonts(doc, options.fonts);
   const cursor = { x: doc.x, y: doc.y };
   doc.save();
   // The state the document may have set would change the slip: a transparency fades the QR code, round caps lengthen
@@ -78,7 +73,7 @@ export function drawPaymentSlip(doc: PDFKitDocument, layout: QRBillLayout, optio
   doc.opacity(1);
   doc.lineCap('butt');
   for (const element of layout.elements) {
-    if (element.type === 'text') drawText(doc, element, options.x, options.y);
+    if (element.type === 'text') drawText(doc, element, options.x, options.y, fonts);
     else drawPath(doc, element, options.x, options.y);
   }
   doc.restore();

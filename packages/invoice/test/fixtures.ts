@@ -49,3 +49,35 @@ export function invoiceInput(changes: Record<string, unknown> = {}): Record<stri
 export function text(length: number, character = 'a'): string {
   return character.repeat(length);
 }
+
+/** An invoice with every part filled: details, subject, introduction, mentions, remarks, closing and payment. */
+export function fullInput(changes: Record<string, unknown> = {}): Record<string, unknown> {
+  return invoiceInput({
+    number: '2026-042',
+    dueDate: '2026-12-20',
+    servicePeriod: 'Novembre 2026',
+    customerReference: 'CMD-7781',
+    subject: 'Prestations de conseil',
+    introduction: 'Madame,\nVoici notre facture.',
+    issuer: {
+      ...ISSUER,
+      extraLines: ['Service des membres'],
+      phones: ['+41 44 123 45 67'],
+      email: 'info@muster-soehne.example',
+      contact: 'www.muster-soehne.example',
+      uid: UID,
+      vatRegistered: true,
+    },
+    recipient: { ...RECIPIENT, salutation: 'Madame', extraLines: ['c/o Muster AG'] },
+    items: [
+      { description: 'Conseil', quantity: 6, unit: 'h', unitPrice: '150', vatRate: '8.1' },
+      { description: 'Paramétrage', quantity: 1, unitPrice: '450', vatRate: '8.1' },
+      { description: 'Rabais', amount: '-90', vatRate: '8.1' },
+    ],
+    mentions: { paymentDays: 30, thanks: true },
+    notes: ['Les cotisations financent les cours du samedi.'],
+    closing: 'Avec nos meilleures salutations.',
+    payment: { account: QR_IBAN, reference: QR_REFERENCE },
+    ...changes,
+  });
+}

@@ -92,4 +92,11 @@ describe('formatMoney', () => {
     expect(formatMoney('0.00', 'space')).toBe('0.00');
     expect(formatMoney('-999999999.99', 'space')).toBe('-999 999 999.99');
   });
+
+  it('keeps the decimals as they are, or none, for quantities and unit prices', () => {
+    expect(formatMoney('1500', 'space')).toBe('1 500');
+    expect(formatMoney('-1234567', 'apostrophe')).toBe("-1'234'567");
+    expect(formatMoney('12.3456', 'space')).toBe('12.3456');
+    expect(formatMoney('1000.125', 'apostrophe')).toBe("1'000.125");
+  });
 });

@@ -82,6 +82,12 @@ importers:
       '@qr-bill/core':
         specifier: workspace:^
         version: link:../core
+      '@qr-bill/pdfkit':
+        specifier: workspace:^
+        version: link:../pdfkit
+      pdfkit:
+        specifier: '>=0.17.0'
+        version: 0.20.2
 
   packages/pdfkit:
     dependencies:

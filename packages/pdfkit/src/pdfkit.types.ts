@@ -81,6 +81,14 @@ export interface PDFKitDocument {
   undash(): unknown;
 }
 
+/** The names under which {@link registerFonts} registered the fonts, to select them with `doc.font(name)`. */
+export interface RegisteredFonts {
+  /** Regular weight. */
+  readonly regular: string;
+  /** Bold weight. */
+  readonly bold: string;
+}
+
 /** The font files of the payment slip: TrueType or OpenType, with the metrics of Liberation Sans (or Arial). */
 export interface PaymentSlipFonts {
   /** Regular weight. */

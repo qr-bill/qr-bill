@@ -2,7 +2,7 @@
 
 A Swiss invoice on A4 with its QR-bill, from your data: your logo and details, the recipient in the window of the envelope, the lines, the VAT and the totals, a few ready-made mentions, and the payment part at the bottom of the last page.
 
-> **Work in progress.** The data, its validation and the computation of the amounts are ready; the PDF comes next. The package is not on npm yet.
+> **Work in progress.** The data, its validation, the amounts and the PDF are ready; the light logo (SVG drawn as vectors, PNG reduced) comes next. The package is not on npm yet.
 
 ## Principles
 
@@ -11,6 +11,54 @@ A Swiss invoice on A4 with its QR-bill, from your data: your logo and details, t
 - **The addresses are those of the QR-bill.** The name and structured address of the issuer and of the recipient are also the creditor and the debtor of the payment part: they follow its rules (character set, lengths, country code). Up to two free lines each are printed on the invoice only.
 - **Five languages**: German, French, Italian, Romansh and English, for the invoice and its payment part.
 - **No floating-point money.** Amounts, prices, quantities and rates are read as decimal strings (or numbers with the decimals allowed) and computed exactly in integers.
+
+## Creating the PDF
+
+`createInvoicePDF` checks the data, then writes the invoice with [PDFKit](https://pdfkit.org), which your project installs (`pdfkit` 0.17 or later). It returns the bytes of the PDF file:
+
+```ts
+import { writeFile } from 'node:fs/promises';
+import { InvoiceValidationError, createInvoicePDF } from '@qr-bill/invoice';
+
+try {
+  const pdf = await createInvoicePDF({
+    language: 'fr',
+    date: '2026-11-20',
+    number: '2026-042',
+    issuer: {
+      name: 'Max Muster & Söhne',
+      street: 'Musterstrasse',
+      buildingNumber: '123',
+      postalCode: '8000',
+      town: 'Seldwyla',
+      country: 'CH',
+    },
+    recipient: { name: 'Simon Muster', postalCode: '8000', town: 'Seldwyla', country: 'CH' },
+    items: [{ description: 'Conseil', quantity: 6, unit: 'h', unitPrice: '150', vatRate: '8.1' }],
+    payment: { account: 'CH44 3199 9123 0008 8901 2', reference: '210000000003139471430009017' },
+  });
+  await writeFile('facture.pdf', pdf);
+} catch (error) {
+  if (error instanceof InvoiceValidationError)
+    console.error(error.issues); // every problem, as validateInvoice reports them
+  else throw error;
+}
+```
+
+It runs on Node, like `@qr-bill/pdfkit`, whose fonts it uses. A page with its payment slip weighs about 42 KB without logo: the two fonts are embedded with only the characters used.
+
+## The page
+
+- **Letterhead**: the logo, fitted in a box of 50 × 18 mm in the top left corner, or the name of the issuer in large type, on two lines at most.
+- **Details of the issuer**: its name when a logo stands for it, its free lines, address, phones, e-mail, contact and UID (followed by MWST, TVA or IVA when it is registered for VAT).
+- **Address window**: on the left by default (the issuer's details then go in the right column), on the right with `addressWindow: 'right'` (the details then go under the letterhead). As Swiss Post asks, the window holds a single line with the sender, separated from the address by a rule, and nothing frames the address. When the issuer and the recipient are in different countries, both addresses end with the name of their country, in the language of the invoice.
+- **Title and details**: the title, then a grid of five columns with the number, the dates, the period, the references and the details added (`extraFields`); then the subject and the introduction.
+- **Lines**: a table whose columns are those the lines use, each as wide as its widest number; the descriptions take the room left and wrap. Over several pages, the header of the table is repeated, and a row never splits.
+- **Totals**: on the right, the subtotal (when something lies between it and the total), the VAT of each rate, the rounding and the total; the VAT included in the prices comes after the total. On the left, beside them, the mentions and the remarks. Both stay together on one page. Then the closing text.
+- **Following pages**: a short header with the name of the issuer, the title and the number, and every page numbered when there are several.
+- **Payment slip**: at the bottom of the last page, or on a page of its own when the last one has no room left.
+
+Every text stays in its zone, whatever its length within the limits: a test draws an invoice whose every field is at its maximum, in the widest characters, in the five languages, with both windows and the three themes, and checks that no text leaves the page, reaches the payment slip or overlaps another.
 
 ## Validating an invoice
 
@@ -160,7 +208,7 @@ A theme changes only the look of the invoice, never its layout: the positions, t
 | `business`           | accent | band filled with the accent, white text      | white                          | accent | dark blue `#1F3A5F` |
 | `modern`             | accent | light tint of the accent, text in the accent | every other row lightly tinted | accent | teal `#0F766E`      |
 
-`modern` also draws a thin bar of the accent along the top of each page. One accent colour, written `#RRGGBB`, replaces the default: `theme: { name: 'business', accent: '#C2410C' }`. The tints are derived from it, and every text stays readable, with a contrast of at least 4.5:1 on its background (level AA of WCAG 2): a text written in the accent is darkened when needed, and the band of `business` takes black text when the accent is too light for white.
+`modern` also draws a thin bar of the accent along the top of each page. One accent colour, written `#RRGGBB`, replaces the default: `theme: { name: 'business', accent: '#C2410C' }`. The tints are derived from it, and every text stays readable, with a contrast of at least 4.5:1 on its background (level AA of WCAG 2): a text written in the accent is darkened when needed, and the band of `business` takes black text when the accent is too light for white. A light accent such as a bright yellow therefore makes a dark olive title and total: when a brand has a light colour and a darker one, the darker one usually makes the better accent.
 
 ## Amounts
 
@@ -168,7 +216,7 @@ With `totals`, the amounts given are printed as they are, and nothing is compute
 
 - **A line**: its `amount`, or its `quantity` (1 when absent) × `unitPrice`, rounded to the centime. A line with neither is a line of text.
 - **The VAT** is computed per rate on the sum of the lines at that rate, not line by line, so that roundings do not add up. Prices exclude VAT by default, and the VAT is added to the total. With `pricesIncludeVAT`, the VAT is the part of the gross amount that is VAT: gross × rate / (100 + rate).
-- **Roundings** are commercial (half away from zero), to the centime. With `roundTo5Centimes`, the total is rounded to 5 centimes and a rounding line says by how much.
+- **Roundings** are commercial (half away from zero), to the centime. With `roundTo5Centimes`, the total is rounded to 5 centimes and, when that changes it, a rounding line says by how much.
 - The total stays within ±999 999 999.99, the limit of a QR-bill.
 
 ## The payment part
@@ -203,5 +251,5 @@ Each problem has a stable `code`, the `path` of the field (`['items', 2, 'unitPr
 | `invalid_email`      | Not an e-mail address                                                                                                  |
 | `invalid_option`     | Not one of the values allowed                                                                                          |
 | `invalid_color`      | Not a colour written `#RRGGBB`                                                                                         |
-| `unsupported_logo`   | The logo is not a PNG or JPEG file                                                                                     |
+| `unsupported_logo`   | The logo is not a PNG or JPEG file, or one that cannot be read                                                         |
 | `logo_too_large`     | The logo file is larger than 2 MB                                                                                      |

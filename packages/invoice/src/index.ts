@@ -1,6 +1,7 @@
 /**
  * Public API of `@qr-bill/invoice`: a Swiss invoice with its QR-bill.
  *
+ * - {@link createInvoicePDF}: the PDF of an invoice, with its payment slip.
  * - {@link validateInvoice}: checks and normalizes the data of an invoice, computes its totals and its QR-bill.
  * - {@link computeInvoiceTotals}: the amounts alone, for a form.
  * - {@link validateUID}: the Swiss business identification number.
@@ -9,6 +10,8 @@
  * @module
  */
 
+export { createInvoicePDF } from './pdf/pdf.js';
+export { InvoiceValidationError } from './invoice/errors.js';
 export { validateInvoice } from './invoice/invoice.validator.js';
 export { INVOICE_LIMITS } from './invoice/limits.js';
 export type { InvoiceLimits, IssuerLimits, RecipientLimits } from './invoice/limits.types.js';
