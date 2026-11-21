@@ -8,17 +8,19 @@ A Swiss invoice on A4 with its QR-bill, from your data: your logo and details, t
 
 The same invoice as a [PDF](assets/invoice-business.pdf); the other themes: [standard](assets/invoice-standard.pdf), in French, and [modern](assets/invoice-modern.pdf), in German.
 
-> **Work in progress.** The data, its validation, the amounts and the PDF are ready; the complete documentation and the first publication come next. The package is not on npm yet.
-
 ## Principles
 
-- **The invoice is always produced.** Only the form of the data is checked: types, lengths, numbers, dates, the UID, the e-mail, and the QR-bill of the payment part, which must be valid since a wrong one would make the payment go astray. What the invoice says is the issuer's business: no legal mention is required (see what Swiss law asks below).
+- **The invoice is always produced.** Only the form of the data is checked: types, lengths, numbers, dates, the UID, the e-mail, and the QR-bill of the payment part, which must be valid since a wrong one would make the payment go astray. What the invoice says is the issuer's business: no legal mention is required (see [what Swiss law asks of an invoice](#what-swiss-law-asks-of-an-invoice)).
 - **Nothing overflows.** Every text field has a maximum length, and a maximum number of lines for the longer ones; [`INVOICE_LIMITS`](#schema) exports them for the `maxlength` of a form. The layout wraps a text within its zone, and shortens it with "…" only as a last resort.
 - **The addresses are those of the QR-bill.** The name and structured address of the issuer and of the recipient are also the creditor and the debtor of the payment part: they follow its rules (character set, lengths, country code). Up to two free lines each are printed on the invoice only.
 - **Five languages**: German, French, Italian, Romansh and English, for the invoice and its payment part.
 - **No floating-point money.** Amounts, prices, quantities and rates are read as decimal strings (or numbers with the decimals allowed) and computed exactly in integers.
 
 ## Creating the PDF
+
+```sh
+npm install @qr-bill/invoice pdfkit
+```
 
 `createInvoicePDF` checks the data, then writes the invoice with [PDFKit](https://pdfkit.org), which your project installs (`pdfkit` 0.17 or later). It returns the bytes of the PDF file:
 
@@ -248,6 +250,27 @@ Its amount is always the total of the invoice. Its creditor is the issuer, its d
 - **A negative total** (a credit note) has no payment part; the invoice is produced all the same.
 
 A problem of the payment part is reported where it is in the invoice: `['payment', 'account']`, `['payment', 'reference']`, `['currency']` for a QR-IBAN with euros. The codes are those of the QR-bill (`invalid_iban`, `qr_iban_requires_qr_reference`…).
+
+## What Swiss law asks of an invoice
+
+This section is information, not legal advice: check what applies to your business with your fiduciary or the authorities. The package checks the form of the data, never what the law asks, so that an invoice is always produced: giving what applies to you is your part.
+
+**An issuer registered for VAT** states on its invoices, according to the [Federal Act on Value Added Tax](https://www.fedlex.admin.ch/eli/cc/2009/615/en) (VAT Act, SR 641.20), article 26:
+
+| The VAT Act asks for                                                                          | With this package                                                                                                         |
+| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| The name and place of the supplier as used in business, that it is registered, its VAT number | `issuer`, and `uid` with `vatRegistered: true`, printed as the VAT number: `CHE-123.456.788 MWST` (TVA, IVA)              |
+| The name and address of the recipient as used in business                                     | `recipient`                                                                                                               |
+| The date or period of the supply, when it differs from the date of the invoice                | `servicePeriod`, or the dates in the descriptions of the lines                                                            |
+| The nature, object and extent of the supply                                                   | The `items`: description, quantity and unit                                                                               |
+| The consideration                                                                             | The amounts of the lines and the total                                                                                    |
+| The rate of VAT and the VAT due; the rate alone when the consideration includes it            | The VAT of each rate in the totals: added to the prices by default, or included with `pricesIncludeVAT` (each rate apart) |
+
+**An issuer not registered for VAT** must not show VAT on its invoices (VAT Act, article 27): whoever shows a VAT they are not entitled to owes it. Give no `vatRate` to the lines; the mention `notVatRegistered` prints "Not registered for VAT" in the language of the invoice.
+
+**The rates** are 8.1 % (normal), 2.6 % (reduced) and 3.8 % (accommodation) since 1 January 2024, as published by the [Federal Tax Administration](https://www.estv.admin.ch/en/vat-rates-switzerland). The package holds no rate: each line gives its own, so a change of the rates needs no new version.
+
+**A company registered in the commercial register** writes its registered business name, complete and unchanged, on its correspondence and its invoices; a logo, an abbreviation or a trade name may be added to it ([Code of Obligations](https://www.fedlex.admin.ch/eli/cc/27/317_321_377/en), SR 220, article 954a). Give that name as `issuer.name`: it is printed as the letterhead, or in the details beside the logo, and as the creditor of the payment part.
 
 ## Problems
 
