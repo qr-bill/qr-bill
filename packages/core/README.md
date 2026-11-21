@@ -28,6 +28,17 @@ Swiss QR-bill (QR-Rechnung, QR-facture, QR-fattura, Quint QR) for JavaScript and
 - **Every problem at once.** Validation reports all issues with stable codes, and plugs into any [Standard Schema](https://standardschema.dev) consumer (Hono, tRPC, TanStack Form…).
 - **Reads QR-bills too.** `parseQRBill()` turns a scanned Swiss QR Code back into a validated bill.
 
+## Documentation
+
+- [Getting started](#example): a QR-bill, its Swiss QR Code and its payment slip as SVG.
+- [Validate a form, field by field](#validate-a-form-field-by-field), with the rules of the standard.
+- [The payment slip in a PDF](https://github.com/qr-bill/qr-bill/blob/main/docs/pdfkit.md), with PDFKit: `@qr-bill/pdfkit`.
+- [Invoices](https://github.com/qr-bill/qr-bill/blob/main/docs/invoice.md): an A4 invoice with its QR-bill, from your data: `@qr-bill/invoice`, coming soon.
+- The API reference: every export is documented in the code with an example, shown by your editor.
+- [Architecture](https://github.com/qr-bill/qr-bill/blob/main/docs/architecture.md), the design and its decisions; [contributing](https://github.com/qr-bill/qr-bill/blob/main/CONTRIBUTING.md).
+
+The standard itself is published by SIX: the [Implementation Guidelines and the style guide of the QR-bill](https://www.six-group.com/en/products-services/banking-services/payment-standardization/standards/qr-bill.html), and the [validation portal](https://validation.iso-payments.ch/gp/qrrechnung) for Swiss QR Codes (free registration).
+
 ## Example
 
 ```ts
@@ -76,6 +87,8 @@ import { attachTo } from '@qr-bill/pdfkit';
 attachTo(doc, bill, { language: 'fr' }); // at the bottom of the last page, or on a new page if the invoice leaves no room
 ```
 
+Options, fonts and how to write your own invoice above the slip: [docs/pdfkit.md](https://github.com/qr-bill/qr-bill/blob/main/docs/pdfkit.md).
+
 ## Validate a form, field by field
 
 Each field of the QR-bill has its validator. It takes the value as typed and returns `true`/`false` when there are two outcomes, or a status naming the problem, ready to be translated:
@@ -102,11 +115,12 @@ The maximum lengths are exported too (`ADDRESS_MAX_LENGTH.name` is 70), for the 
 
 ## Packages
 
-| Package                                                                           | Status      | Purpose                                               |
-| --------------------------------------------------------------------------------- | ----------- | ----------------------------------------------------- |
-| `@qr-bill/core`                                                                   | in progress | Validation, payload, references, parsing, layout, SVG |
-| [`@qr-bill/pdfkit`](https://github.com/qr-bill/qr-bill/tree/main/packages/pdfkit) | in progress | Payment slip in a PDFKit document (Node)              |
-| `@qr-bill/jspdf`                                                                  | planned     | Payment slip in a jsPDF document (browser)            |
+| Package                                                                             | Version                                                                                               | Documentation                                                                   | Purpose                                               |
+| ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `@qr-bill/core`                                                                     | [![npm](https://img.shields.io/npm/v/@qr-bill/core)](https://www.npmjs.com/package/@qr-bill/core)     | [Getting started](#example)                                                     | Validation, payload, references, parsing, layout, SVG |
+| [`@qr-bill/pdfkit`](https://github.com/qr-bill/qr-bill/tree/main/packages/pdfkit)   | [![npm](https://img.shields.io/npm/v/@qr-bill/pdfkit)](https://www.npmjs.com/package/@qr-bill/pdfkit) | [docs/pdfkit.md](https://github.com/qr-bill/qr-bill/blob/main/docs/pdfkit.md)   | Payment slip in a PDFKit document (Node)              |
+| [`@qr-bill/invoice`](https://github.com/qr-bill/qr-bill/tree/main/packages/invoice) | coming soon                                                                                           | [docs/invoice.md](https://github.com/qr-bill/qr-bill/blob/main/docs/invoice.md) | A4 invoice with its QR-bill, from data, as a PDF      |
+| `@qr-bill/jspdf`                                                                    | planned                                                                                               | —                                                                               | Payment slip in a jsPDF document (browser)            |
 
 ## Quality
 
