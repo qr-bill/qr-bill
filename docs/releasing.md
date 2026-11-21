@@ -68,6 +68,25 @@ If the approval comes after the 30 minutes, nothing is lost: the GitHub releases
 
 To let users try a version before it becomes `latest`, enter the prerelease mode on a release branch with `pnpm changeset pre enter next`, then `pnpm changeset version`: the versions look like `0.2.0-next.0`, and the workflow stages them for the npm tag `next` (`npm install @qr-bill/core@next`). `pnpm changeset pre exit` returns to normal versions.
 
+### A new package
+
+Trusted Publishing is set in the settings of a package that exists on npm: the first version of a new package is published by hand, once. The workflow leaves it aside and says so: "a new package, absent from npm", with the notice "First publication by hand".
+
+1. **Release as usual.** The release pull request gives the new package its first version: a changeset `minor` turns `0.0.0` into `0.1.0`. After the merge, the workflow stages and releases the other packages, and lists the new one without staging it.
+2. **Publish it by hand**, once the packages it depends on are public in the versions it needs. From an up-to-date `main`, on a computer logged in to npm (`npm login`) with two-factor authentication:
+
+   ```sh
+   git switch main && git pull
+   corepack pnpm install --frozen-lockfile
+   corepack pnpm build
+   corepack pnpm --filter @qr-bill/<name> publish --access public
+   ```
+
+   pnpm replaces `workspace:^` by the versions of the packages, and npm asks for the code of two-factor authentication. This first version carries no provenance.
+
+3. **Tag it.** On the commit it was published from: `git tag @qr-bill/<name>@<version>`, then `git push origin @qr-bill/<name>@<version>`. The next run of the workflow (the next push to `main`, or "Run workflow" without dry-run) creates its GitHub release from the changelog.
+4. **Set it up on npmjs.com**, in the settings of the new package: its Trusted Publisher and its "Publishing access", as for the others (see [One-time setup](#one-time-setup)). Its next versions go through the workflow.
+
 ## What protects a release
 
 | Protection                              | Where                               | What it prevents                                                                                                                                                |
@@ -95,7 +114,7 @@ To let users try a version before it becomes `latest`, enter the prerelease mode
 Done once, recorded here so that it can be checked or redone.
 
 - **npm**: the organisation `qr-bill` owns the scope `@qr-bill`; its members use two-factor authentication. In the settings of each package, "Publishing access" requires two-factor authentication and disallows tokens that bypass it.
-- **Trusted Publishing**, for each package on npmjs.com (package → Settings → Trusted Publisher → GitHub Actions): organisation or user `qr-bill`, repository `qr-bill`, workflow filename `release.yml`, environment `npm`, and under "Allowed actions" neither "Allow npm publish" nor "Allow npm dist-tag": `npm stage publish` only. A new connection expires if it is not used within two days, so it is created on the day of a release. It is set in the settings of an existing package: a new package is published once by hand first, as 0.1.0 was.
+- **Trusted Publishing**, for each package on npmjs.com (package → Settings → Trusted Publisher → GitHub Actions): organisation or user `qr-bill`, repository `qr-bill`, workflow filename `release.yml`, environment `npm`, and under "Allowed actions" neither "Allow npm publish" nor "Allow npm dist-tag": `npm stage publish` only. A new connection expires if it is not used within two days, so it is created on the day of a release. It is set in the settings of an existing package: a new package is published once by hand first, as 0.1.0 was (see [A new package](#a-new-package)).
 - **GitHub environment `npm`**: deployment branches limited to `main`.
 - **Rulesets** "main" and "release tags", described above.
 

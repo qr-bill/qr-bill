@@ -15,6 +15,7 @@
 //
 // | On npm | GitHub release      | State      | What `publish` does                                                    |
 // | ------ | ------------------- | ---------- | ---------------------------------------------------------------------- |
+// | absent | none                | first      | nothing: a new package is published once by hand (docs/releasing.md)   |
 // | no     | none                | new        | packs, stages on npm, creates the draft release with the changelog     |
 // | no     | draft               | staged     | nothing: waits for the approval on npmjs.com                           |
 // | yes    | draft               | approved   | publishes the release, which creates the tag                           |
@@ -70,6 +71,20 @@ function workspacePackages() {
   };
   for (const pkg of byName.values()) visit(pkg);
   return sorted;
+}
+
+/**
+ * Whether a package exists on npm, whatever its versions. A new package cannot be staged: Trusted Publishing is set in
+ * the settings of an existing package, so its first version is published by hand.
+ */
+function packageExists(name) {
+  try {
+    run('npm', ['view', name, 'name']);
+    return true;
+  } catch (error) {
+    if (String(error.stderr).includes('E404')) return false;
+    throw error;
+  }
 }
 
 /** Whether this version of the package is public on npm. A package that does not exist yet answers E404. */
@@ -131,7 +146,8 @@ function readStates() {
     const release = releases.get(tag);
     const onNpm = isOnNpm(name, version);
     let state;
-    if (!onNpm) state = release?.draft ? 'staged' : 'new';
+    if (!onNpm && !release && !packageExists(name)) state = 'first';
+    else if (!onNpm) state = release?.draft ? 'staged' : 'new';
     else if (release?.draft) state = 'approved';
     else if (release) state = 'released';
     else if (github('GET', `git/ref/tags/${tag}`) !== null) state = 'tagged';
@@ -177,6 +193,7 @@ function publishRelease(pkg, release) {
 }
 
 const descriptions = {
+  first: 'a new package, absent from npm: its first version is published by hand',
   new: 'not on npm yet: to stage',
   staged: 'staged on npm, waiting for approval on npmjs.com',
   approved: 'approved on npm: its GitHub release is to publish',
@@ -187,6 +204,12 @@ const descriptions = {
 
 const states = readStates();
 for (const { tag, state } of states) console.log(`${tag}: ${descriptions[state]}`);
+for (const { tag } of states.filter(({ state }) => state === 'first')) {
+  console.log(
+    `::notice title=First publication by hand::${tag} is a new package. Publish it by hand, then configure its ` +
+      'Trusted Publisher: see "A new package" in docs/releasing.md.',
+  );
+}
 const todo = states.filter(({ state }) => ['new', 'approved', 'tagged', 'unknown'].includes(state));
 if (GITHUB_OUTPUT) {
   appendFileSync(GITHUB_OUTPUT, `count=${todo.length}\n`);
