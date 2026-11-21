@@ -4,7 +4,10 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   // The tests of the adapters run against the sources of the core, so that no build is needed first.
   resolve: {
-    alias: { '@qr-bill/core': fileURLToPath(new URL('packages/core/src/index.ts', import.meta.url)) },
+    alias: {
+      '@qr-bill/core': fileURLToPath(new URL('packages/core/src/index.ts', import.meta.url)),
+      '@qr-bill/pdfkit': fileURLToPath(new URL('packages/pdfkit/src/index.ts', import.meta.url)),
+    },
   },
   test: {
     include: ['packages/*/test/**/*.test.ts'],

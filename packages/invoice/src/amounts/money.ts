@@ -95,22 +95,23 @@ export function toShortDecimal(units: bigint, scale: number, minDecimals = 0): s
 }
 
 /**
- * Writes an amount as it is printed on the invoice: thousands separated by a space (as on the payment part) or by
- * an apostrophe, two decimals.
+ * Writes a decimal number as it is printed on the invoice: thousands separated by a space (as on the payment part)
+ * or by an apostrophe, the decimals kept as they are. Serves the amounts, the quantities and the unit prices.
  *
- * @param amount - A decimal string with two decimals, e.g. `"-1234.50"`.
+ * @param amount - A decimal string, e.g. `"-1234.50"` or `"1500"`.
  * @param format - `space` or `apostrophe`.
- * @returns The amount as printed.
+ * @returns The number as printed.
  * @example
  * ```ts
  * formatMoney('-1234.50', 'space'); // '-1 234.50'
  * formatMoney('1234567.00', 'apostrophe'); // "1'234'567.00"
+ * formatMoney('1500', 'space'); // '1 500'
  * ```
  */
 export function formatMoney(amount: string, format: AmountFormat): string {
   const negative = amount.startsWith('-');
-  const [whole, fraction] = (negative ? amount.slice(1) : amount).split('.') as [string, string];
+  const [whole = '', ...fraction] = (negative ? amount.slice(1) : amount).split('.');
   const separator = format === 'space' ? ' ' : "'";
   const grouped = whole.replace(/\B(?=(\d{3})+$)/g, separator);
-  return `${negative ? '-' : ''}${grouped}.${fraction}`;
+  return [`${negative ? '-' : ''}${grouped}`, ...fraction].join('.');
 }

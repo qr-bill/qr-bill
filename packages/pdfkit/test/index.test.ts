@@ -4,6 +4,6 @@ import * as api from '../src/index.js';
 
 describe('public API', () => {
   it('exports exactly these values', () => {
-    expect(Object.keys(api).sort()).toEqual(['POINTS_PER_MM', 'attachTo', 'drawPaymentSlip']);
+    expect(Object.keys(api).sort()).toEqual(['POINTS_PER_MM', 'attachTo', 'drawPaymentSlip', 'registerFonts']);
   });
 });

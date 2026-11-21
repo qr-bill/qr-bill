@@ -46,6 +46,10 @@
     "prepublishOnly": "node ../../scripts/check-release-blockers.js"
   },
   "dependencies": {
-    "@qr-bill/core": "workspace:^"
+    "@qr-bill/core": "workspace:^",
+    "@qr-bill/pdfkit": "workspace:^"
+  },
+  "peerDependencies": {
+    "pdfkit": ">=0.17.0"
   }
 }

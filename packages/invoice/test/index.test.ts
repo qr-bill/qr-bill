@@ -7,7 +7,9 @@ describe('public API', () => {
     expect(Object.keys(api).sort()).toEqual([
       'INVOICE_LIMITS',
       'INVOICE_THEMES',
+      'InvoiceValidationError',
       'computeInvoiceTotals',
+      'createInvoicePDF',
       'validateInvoice',
       'validateUID',
     ]);

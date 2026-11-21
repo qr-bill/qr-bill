@@ -1,9 +1,9 @@
 {
-  // Builds against the published form of the core (its dist, built first): @qr-bill/core stays an external
-  // dependency instead of being copied into the invoice.
+  // Builds against the published form of the core and of the adapter (their dist, built first): they stay external
+  // dependencies instead of being copied into the invoice.
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "types": [],
+    "types": ["node"],
     "noEmit": true
   },
   "include": ["src"]

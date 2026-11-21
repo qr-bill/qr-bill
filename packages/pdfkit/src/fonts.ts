@@ -7,7 +7,10 @@
  */
 
 import { readFileSync } from 'node:fs';
-import type { PaymentSlipFonts } from './pdfkit.types.js';
+import type { PDFKitDocument, PaymentSlipFonts, RegisteredFonts } from './pdfkit.types.js';
+
+/** Names the fonts are registered under, chosen not to collide with the fonts of the document. */
+const FONT_NAMES: RegisteredFonts = { regular: 'QRBill-LiberationSans', bold: 'QRBill-LiberationSans-Bold' };
 
 let fonts: PaymentSlipFonts | undefined;
 
@@ -22,4 +25,24 @@ export function defaultFonts(): PaymentSlipFonts {
     bold: readFileSync(new URL('../fonts/LiberationSans-Bold.ttf', import.meta.url)),
   };
   return fonts;
+}
+
+/**
+ * Registers the fonts of the payment slip in a PDFKit document, so that other content, such as the invoice above
+ * the slip, can be written in the same fonts: they are then embedded once, with only the characters used.
+ *
+ * @param doc - A PDFKit document (`new PDFDocument()`).
+ * @param fonts - The font files; by default Liberation Sans, shipped with this package.
+ * @returns The names to select the fonts with, e.g. `doc.font(names.bold)`.
+ * @example
+ * ```ts
+ * const names = registerFonts(doc);
+ * doc.font(names.bold).fontSize(16).text('Invoice 2026-042');
+ * ```
+ */
+export function registerFonts(doc: Pick<PDFKitDocument, 'registerFont'>, fonts?: PaymentSlipFonts): RegisteredFonts {
+  const files = fonts ?? defaultFonts();
+  doc.registerFont(FONT_NAMES.regular, files.regular);
+  doc.registerFont(FONT_NAMES.bold, files.bold);
+  return FONT_NAMES;
 }
