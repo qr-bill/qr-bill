@@ -11,7 +11,10 @@ import type { Address } from '@qr-bill/core';
  * part: they follow the rules of the QR-bill (structured address, character set).
  */
 export interface InvoiceIssuer extends Address {
-  /** The logo, as the bytes of a PNG or JPEG file, max. 2 MB. It is fitted in a box of 50 × 18 mm. */
+  /**
+   * The logo, as the bytes of a PNG or JPEG file, max. 2 MB. It is fitted in a box of 50 × 18 mm and embedded as it
+   * is: about 591 × 213 pixels (300 dpi) is the best size, a larger image only makes the PDF heavier.
+   */
   readonly logo?: Uint8Array | undefined;
   /** Up to 2 lines printed under the name on the invoice only, e.g. a department; max. 70 characters each. */
   readonly extraLines?: readonly string[] | undefined;

@@ -9,7 +9,7 @@ A Swiss invoice on A4 with its QR-bill, from your data: your logo and details, t
 
 <!-- release-blocker: remove this banner and this comment before the first npm release -->
 
-> **Status: work in progress, not published yet.** The data, its validation, the amounts and the PDF are ready; the light logo comes next.
+> **Status: work in progress, not published yet.** The data, its validation, the amounts and the PDF are ready; the complete documentation comes next.
 
 The schema of an invoice, the computation of the amounts and the rules of the payment part are described in [docs/invoice.md](https://github.com/qr-bill/qr-bill/blob/main/docs/invoice.md).
 

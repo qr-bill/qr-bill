@@ -87,14 +87,14 @@ flowchart LR
 
 ## Packages
 
-| Package            | Depends on      | Notes                                                                                                                |
-| ------------------ | --------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `@qr-bill/core`    | nothing         | `.` today; `/svg` and `/layout` subpaths next                                                                        |
-| `@qr-bill/pdfkit`  | `pdfkit` (peer) | server-side PDF (Node), first adapter; ships Liberation Sans                                                         |
-| `@qr-bill/invoice` | `@qr-bill/core` | A4 invoice with its QR-bill, from data; in progress (data and amounts ready, PDF next), see [invoice.md](invoice.md) |
-| `@qr-bill/jspdf`   | `jspdf` (peer)  | browser-side PDF                                                                                                     |
-| `@qr-bill/react`   | `react` (peer)  | later; React Native through `react-native-svg`                                                                       |
-| `@qr-bill/camt`    | —               | later: reconcile ISO 20022 camt.054 bank statements by QR reference                                                  |
+| Package            | Depends on                                          | Notes                                                                                             |
+| ------------------ | --------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `@qr-bill/core`    | nothing                                             | `.` today; `/svg` and `/layout` subpaths next                                                     |
+| `@qr-bill/pdfkit`  | `pdfkit` (peer)                                     | server-side PDF (Node), first adapter; ships Liberation Sans                                      |
+| `@qr-bill/invoice` | `@qr-bill/core`, `@qr-bill/pdfkit`, `pdfkit` (peer) | A4 invoice with its QR-bill, from data, as a PDF; not published yet, see [invoice.md](invoice.md) |
+| `@qr-bill/jspdf`   | `jspdf` (peer)                                      | browser-side PDF                                                                                  |
+| `@qr-bill/react`   | `react` (peer)                                      | later; React Native through `react-native-svg`                                                    |
+| `@qr-bill/camt`    | —                                                   | later: reconcile ISO 20022 camt.054 bank statements by QR reference                               |
 
 ## Decisions
 

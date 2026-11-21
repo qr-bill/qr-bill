@@ -2,7 +2,7 @@
 
 A Swiss invoice on A4 with its QR-bill, from your data: your logo and details, the recipient in the window of the envelope, the lines, the VAT and the totals, a few ready-made mentions, and the payment part at the bottom of the last page.
 
-> **Work in progress.** The data, its validation, the amounts and the PDF are ready; the light logo (SVG drawn as vectors, PNG reduced) comes next. The package is not on npm yet.
+> **Work in progress.** The data, its validation, the amounts and the PDF are ready; the complete documentation and the first publication come next. The package is not on npm yet.
 
 ## Principles
 
@@ -49,7 +49,7 @@ It runs on Node, like `@qr-bill/pdfkit`, whose fonts it uses. A page with its pa
 
 ## The page
 
-- **Letterhead**: the logo, fitted in a box of 50 × 18 mm in the top left corner, or the name of the issuer in large type, on two lines at most.
+- **Letterhead**: the logo (see [The logo](#the-logo)), fitted in a box of 50 × 18 mm in the top left corner, or the name of the issuer in large type, on two lines at most.
 - **Details of the issuer**: its name when a logo stands for it, its free lines, address, phones, e-mail, contact and UID (followed by MWST, TVA or IVA when it is registered for VAT).
 - **Address window**: on the left by default (the issuer's details then go in the right column), on the right with `addressWindow: 'right'` (the details then go under the letterhead). As Swiss Post asks, the window holds a single line with the sender, separated from the address by a rule, and nothing frames the address. When the issuer and the recipient are in different countries, both addresses end with the name of their country, in the language of the invoice.
 - **Title and details**: the title, then a grid of five columns with the number, the dates, the period, the references and the details added (`extraFields`); then the subject and the introduction.
@@ -59,6 +59,20 @@ It runs on Node, like `@qr-bill/pdfkit`, whose fonts it uses. A page with its pa
 - **Payment slip**: at the bottom of the last page, or on a page of its own when the last one has no room left.
 
 Every text stays in its zone, whatever its length within the limits: a test draws an invoice whose every field is at its maximum, in the widest characters, in the five languages, with both windows and the three themes, and checks that no text leaves the page, reaches the payment slip or overlaps another.
+
+## The logo
+
+The logo is yours to prepare: the invoice checks its limits, places it, and changes nothing in it.
+
+- **Accepted**: a PNG or JPEG file, given as bytes (`Uint8Array` or `Buffer`), at most 2 MB. Another format is reported as `unsupported_logo`, a larger file as `logo_too_large`.
+- **Placed**: in a box of 50 × 18 mm in the top left corner of the first page, as large as it fits, its proportions kept. It is embedded as it is: not cropped, not converted, not reduced.
+
+Recommendations:
+
+- **A PNG with a transparent background** for a logo of flat colours and text. A JPEG only for a photograph: it has no transparency.
+- **About 591 × 213 pixels at most**: the box at 300 dpi, the resolution of print. A logo three times as wide as it is high is best at 591 × 197 pixels. A larger image prints no sharper, but the PDF grows by about the size of the file: a 2 MB logo makes an invoice of more than 2 MB.
+- **An SVG logo**: export it from your design tool as a PNG of that size.
+- **No margin around the logo in the file**: transparent space counts in the box and makes the logo smaller.
 
 ## Validating an invoice
 
@@ -134,7 +148,7 @@ The limits are in characters (Unicode code points). "—" means no limit beyond 
 | `issuer.postalCode`     | text    | yes      | 16     | Postal code, without country prefix                                                |
 | `issuer.town`           | text    | yes      | 35     | Town                                                                               |
 | `issuer.country`        | text    | yes      | —      | Two-letter ISO 3166-1 code: `CH`. Printed when the recipient is in another country |
-| `issuer.logo`           | bytes   | no       | 2 MB   | A PNG or JPEG file (`Uint8Array` or `Buffer`)                                      |
+| `issuer.logo`           | bytes   | no       | 2 MB   | A PNG or JPEG file (`Uint8Array` or `Buffer`), see [The logo](#the-logo)           |
 | `issuer.extraLines`     | text[]  | no       | 2 × 70 | Lines under the name, on the invoice only: a department…                           |
 | `issuer.phones`         | text[]  | no       | 2 × 30 | Phone numbers, as printed                                                          |
 | `issuer.email`          | text    | no       | 70     | E-mail address                                                                     |
