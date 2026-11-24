@@ -6,6 +6,13 @@
   </picture>
 </h1>
 
+<p align="center">
+  <a href="https://github.com/qr-bill/qr-bill/actions/workflows/ci.yml"><img src="https://github.com/qr-bill/qr-bill/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://www.npmjs.com/package/@qr-bill/invoice"><img src="https://img.shields.io/npm/v/@qr-bill/invoice" alt="npm version of @qr-bill/invoice" /></a>
+  <a href="https://github.com/qr-bill/qr-bill/blob/main/vitest.config.ts"><img src="https://img.shields.io/badge/coverage-100%25-brightgreen" alt="Coverage: 100 %" /></a>
+  <a href="https://github.com/qr-bill/qr-bill/blob/main/LICENSE"><img src="https://img.shields.io/github/license/qr-bill/qr-bill" alt="License: MIT" /></a>
+</p>
+
 A Swiss invoice on A4 with its QR-bill, from your data: your logo and details, the recipient in the window of the envelope, the lines, the VAT and the totals, a few ready-made mentions, and the payment part at the bottom of the last page. In German, French, Italian, Romansh and English. Built on [`@qr-bill/core`](https://github.com/qr-bill/qr-bill/tree/main/packages/core).
 
 <p align="center">

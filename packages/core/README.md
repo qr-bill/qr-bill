@@ -171,6 +171,19 @@ The maximum lengths are exported too (`ADDRESS_MAX_LENGTH.name` is 70), for the 
 - Every example of the documentation comments is run by the tests, so the documentation cannot drift from the code.
 - 100 % coverage enforced in CI on Node 22, 24 and 26.
 
+The Swiss QR Codes of these bills were checked with the [SIX QR-bill Validation Portal](https://validation.iso-payments.ch/gp/qrrechnung) on 24 November 2026, for v2.4 and v2.3, without errors:
+
+| Bills                           | What they cover                                                                                                                                                                                                       |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Examples 1 to 6 of the standard | QR-IBAN with a QR reference, IBAN with a Creditor Reference or without reference, with or without amount and debtor, billing information and alternative procedures, a creditor in Liechtenstein, a debtor in Germany |
+| Extended character set          | Latin-1, Latin Extended-A, Ș ș Ț ț and €, on two and three bytes in UTF-8                                                                                                                                             |
+| Maximum content                 | 997 bytes, the largest QR code allowed (version 25)                                                                                                                                                                   |
+| Euro                            | EUR, IBAN with a Creditor Reference, a debtor abroad                                                                                                                                                                  |
+| Liechtenstein                   | An LI IBAN, without reference nor amount                                                                                                                                                                              |
+| Notification                    | Amount 0.00 with the message "do not use for payment"                                                                                                                                                                 |
+| Amounts                         | The maximum, 999 999 999.99, and the minimum, 0.01                                                                                                                                                                    |
+| Line endings                    | CR LF instead of LF                                                                                                                                                                                                   |
+
 See the [architecture](https://github.com/qr-bill/qr-bill/blob/main/docs/architecture.md) for the design.
 
 ## Contributing
