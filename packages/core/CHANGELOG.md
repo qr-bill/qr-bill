@@ -1,5 +1,11 @@
 # @qr-bill/core
 
+## 0.1.2
+
+### Patch Changes
+
+- 7babd5c: The README lists the bills whose Swiss QR Codes were checked with the SIX QR-bill Validation Portal, for v2.4 and v2.3, without errors.
+
 ## 0.1.1
 
 ### Patch Changes
