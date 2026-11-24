@@ -1,5 +1,13 @@
 # @qr-bill/invoice
 
+## 0.1.1
+
+### Patch Changes
+
+- 7babd5c: The README shows the badges of the other packages: CI, npm version, coverage and license.
+- Updated dependencies [7babd5c]
+  - @qr-bill/core@0.1.2
+
 ## 0.1.0
 
 ### Minor Changes

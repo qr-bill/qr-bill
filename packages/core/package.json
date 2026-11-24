@@ -1,6 +1,6 @@
 {
   "name": "@qr-bill/core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Swiss QR-bill (QR-Rechnung, QR-facture) for JavaScript: validation, Swiss QR Code, references, layout of the payment slip and SVG, following the SIX Implementation Guidelines v2.4. Zero dependencies, runs everywhere.",
   "keywords": [
     "qr-bill",
